@@ -1,0 +1,31 @@
+import {Meta, Story, Preview, Props} from '@storybook/addon-docs/blocks'
+
+import { RuleBuilder, RuleBuilderProps } from './RuleBuilder'
+
+<Meta title="Components/RuleBuilder" component={RuleBuilder} />
+
+# RuleBuilder
+
+This is the `RuleBuilder`
+
+```jsx
+import { RuleBuilder } from 'react-rulebuilder'
+```
+
+<Preview withSource="open">
+  <Story name="RuleBuilder">
+    <RuleBuilder name='John' />
+  </Story>
+</Preview>
+
+## Props
+
+<Props of={RuleBuilder} />
+
+## Using different Prop Name
+
+<Preview withSource="open">
+  <Story name="Different Prop Name">
+    <RuleBuilder name='Frances' />
+  </Story>
+</Preview>
