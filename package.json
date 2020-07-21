@@ -66,6 +66,9 @@
     "testEnvironment": "jsdom",
     "testPathIgnorePatterns": [
       "build/"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.ts"
     ]
   },
   "standard": {
