@@ -1,29 +1,27 @@
-# react-rulebuilder
-
-This is a template repo. just clone it, export it and rename to set your own component library module name.
+# Rule Builder for React
 
 ## Usage
 
 To install dependencies
 
 ```
-$ yarn install
+$ npm install
 ```
 
 To build
 
 ```
-$ yarn build
+$ npm run build
 ```
 
 To run tests
 
 ```
-$ yarn test
+$ npm test
 ```
 
 To run Storybook
 
 ```
-$ yarn storybook
+$ npm run storybook
 ```
