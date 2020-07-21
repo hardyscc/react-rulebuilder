@@ -1,7 +1,7 @@
 {
-  "name": "my-module",
-  "version": "1.0.0",
-  "description": "My Component Library template",
+  "name": "react-rulebuilder",
+  "version": "0.0.0",
+  "description": "Rule Builder for React",
   "main": "build/index.js",
   "module": "build/index.es.js",
   "jsnext:main": "build/index.es.js",
@@ -10,13 +10,13 @@
     "lint": "standard",
     "format": "prettier-standard --format",
     "test": "jest --coverage",
-    "storybook": "start-storybook"
+    "storybook": "start-storybook",
+    "release": "release-it"
   },
   "keywords": [],
   "author": {
-    "name": "Ernesto Freyre",
-    "email": "ernestofreyreg@gmail.com",
-    "url": "https://medium.com/@efreyreg"
+    "name": "Hardys",
+    "email": "hardyscc@gmail.com"
   },
   "license": "MIT",
   "devDependencies": {
@@ -37,6 +37,7 @@
     "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-dom": "^16.13.1",
+    "release-it": "13.6.5",
     "rollup": "^2.22.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
