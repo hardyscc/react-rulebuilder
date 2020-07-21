@@ -54,6 +54,9 @@
     "ts-loader": "8.0.1",
     "typescript": "3.9.7"
   },
+  "dependencies": {
+    "react-querybuilder": "3.5.1"
+  },
   "peerDependencies": {
     "react": "^16",
     "react-dom": "^16"
