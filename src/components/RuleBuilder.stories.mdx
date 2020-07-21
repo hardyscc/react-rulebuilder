@@ -13,8 +13,11 @@ import { RuleBuilder } from 'react-rulebuilder'
 ```
 
 <Preview withSource='open'>
-  <Story name='RuleBuilder'>
-    <RuleBuilder name='John' />
+  <Story name='Default'>
+    <RuleBuilder
+      fields={[{ name: 'name', label: 'Name' }]}
+      onQueryChange={() => {}}
+    />
   </Story>
 </Preview>
 
@@ -22,10 +25,13 @@ import { RuleBuilder } from 'react-rulebuilder'
 
 <Props of={RuleBuilder} />
 
-## Using different Prop Name
+## Advance
 
 <Preview withSource='open'>
-  <Story name='Different Prop Name'>
-    <RuleBuilder name='Frances' />
+  <Story name='Advance'>
+    <RuleBuilder
+      fields={[{ name: 'name', label: 'Name' }]}
+      onQueryChange={() => {}}
+    />
   </Story>
 </Preview>

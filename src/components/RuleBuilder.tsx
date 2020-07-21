@@ -1,11 +1,10 @@
 import * as React from 'react'
+import QueryBuilder, { QueryBuilderProps } from 'react-querybuilder'
 
-interface RuleBuilderProps {
-  name: string
-}
+interface RuleBuilderProps extends QueryBuilderProps {}
 
-export const RuleBuilder: React.FC<RuleBuilderProps> = ({ name }) => (
+export const RuleBuilder: React.FC<RuleBuilderProps> = props => (
   <div role='heading' aria-level={1}>
-    My First Component: {name}
+    <QueryBuilder {...props} />
   </div>
 )
