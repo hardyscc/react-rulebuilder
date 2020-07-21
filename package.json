@@ -1,6 +1,6 @@
 {
   "name": "react-rulebuilder",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Rule Builder for React",
   "main": "build/index.js",
   "module": "build/index.es.js",
