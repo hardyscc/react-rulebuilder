@@ -15,8 +15,10 @@ import { RuleBuilder } from 'react-rulebuilder'
 <Preview withSource='open'>
   <Story name='Default'>
     <RuleBuilder
-      fields={[{ name: 'name', label: 'Name' }]}
-      onQueryChange={() => {}}
+      queryProps={{
+        fields: [{ name: 'name', label: 'Name' }],
+        onQueryChange: () => {}
+      }}
     />
   </Story>
 </Preview>
@@ -30,8 +32,11 @@ import { RuleBuilder } from 'react-rulebuilder'
 <Preview withSource='open'>
   <Story name='Advance'>
     <RuleBuilder
-      fields={[{ name: 'name', label: 'Name' }]}
-      onQueryChange={() => {}}
+      inputdata={{ rules: [] }}
+      queryProps={{
+        fields: [{ name: 'name', label: 'Name' }],
+        onQueryChange: () => {}
+      }}
     />
   </Story>
 </Preview>

@@ -5,8 +5,10 @@ import { RuleBuilder } from '../../index'
 test('Renders', async () => {
   const { getByText } = render(
     <RuleBuilder
-      fields={[{ name: 'name', label: 'Name' }]}
-      onQueryChange={() => {}}
+      queryProps={{
+        fields: [{ name: 'name', label: 'Name' }],
+        onQueryChange: () => {}
+      }}
     />
   )
   expect(getByText('AND')).toBeInTheDocument()
