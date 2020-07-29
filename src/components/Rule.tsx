@@ -1,95 +1,52 @@
 import React from 'react'
-import { QueryBuilderProps } from 'react-querybuilder'
-import { Action, Actions } from '..'
-import { Condition, ConditionData } from './Condition'
+import QueryBuilder, {
+  QueryBuilderProps,
+  RuleGroupType
+} from 'react-querybuilder'
+import { Action, ActionContext, queryType } from '../context/ActionContext'
 
 export type RuleData = {
   id: string
-  conditions: ConditionData[]
+  query: queryType
 }
 
 export interface RuleProps {
   queryProps: QueryBuilderProps
   data: RuleData
+  gidx: number
   ridx: number
-  dispatch: React.Dispatch<Actions>
 }
 
-export const Rule: React.FC<RuleProps> = ({
-  queryProps,
-  data,
-  ridx,
-  dispatch
-}) => {
-  // const [open, setOpen] = React.useState(false)
-  let curentQuery = { json: '', sql: '' }
+export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
+  // const qProp: QueryBuilderProps = { ...queryProps, translations: { ...queryProps.translations, addGroup: { label: "+Query", title: "Add query" } } };
 
-  // const handleConditionChange = (query: queryType) => {
-  //   console.log('handleConditionChange: ' + JSON.stringify(query))
-  //   curentQuery = query
-  // }
-
-  // const handleClose = () => {
-  //   setOpen(false)
-  // }
-
-  // const handleSave = () => {
-  //   dispatch({ type: Action.AddCondition, cidx: ridx, query: curentQuery })
-  //   setOpen(false)
-  //   console.log('handleClose: ' + JSON.stringify(curentQuery))
-  // }
+  const { dispatch } = React.useContext(ActionContext)
 
   return (
     <div>
-      <label>Rule {ridx}</label>
+      <label htmlFor={data.id}>Rule {ridx}</label>
+      <input name={data.id} value={data.id} />
+      <QueryBuilder
+        {...{
+          ...queryProps,
+          translations: {
+            ...queryProps.translations,
+            addGroup: { label: '+Statement', title: 'Add statement' },
+            addRule: { label: '+Condition', title: 'Add condition' }
+          },
+          onQueryChange: (ruleGroup: RuleGroupType) => {
+            console.log(ruleGroup)
+          }
+        }}
+      />
+      consequence: <input></input>
       <button
         onClick={() => {
-          dispatch({ type: Action.DeleteRule, ridx: ridx })
+          dispatch({ type: Action.DeleteRule, gidx: gidx, ridx: ridx })
         }}
       >
         x
       </button>
-      {data.conditions.map((condition, cidx) => (
-        <Condition
-          queryProps={queryProps}
-          data={condition}
-          ridx={ridx}
-          cidx={cidx}
-          dispatch={dispatch}
-        />
-      ))}
-      <button
-        onClick={() => {
-          dispatch({
-            type: Action.AddCondition,
-            ridx: ridx,
-            query: curentQuery
-          })
-        }}
-      >
-        Add Condition
-      </button>
-
-      {/* <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='max-width-dialog-title'
-      >
-        <DialogTitle id='max-width-dialog-title'>
-          Condition Edititor
-        </DialogTitle>
-        <DialogContent>
-          <ConditionsEditor
-            query={defaultQuery}
-            onChange={handleConditionChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSave} color='primary'>
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog> */}
     </div>
   )
 }
