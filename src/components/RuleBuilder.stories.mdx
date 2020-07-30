@@ -20,6 +20,7 @@ import { RuleBuilder } from 'react-rulebuilder'
         onQueryChange: () => {}
       }}
     />
+    >
   </Story>
 </Preview>
 
@@ -32,11 +33,51 @@ import { RuleBuilder } from 'react-rulebuilder'
 <Preview withSource='open'>
   <Story name='Advance'>
     <RuleBuilder
-      inputdata={{ rules: [] }}
+      inputData={{
+        groups: [
+          {
+            id: 'Oqpu5t0lHN6dqZCPSXFov',
+            rules: [
+              {
+                id: 'LTEAHDME9MCWKEmYRBGbm',
+                priority: 100,
+                condition: {
+                  id: 'qOMyWGupsLapNZZi9Vq15',
+                  rules: [
+                    {
+                      id: 'r-W_3gdQThrjkBzfiyf9Lq9',
+                      field: 'name',
+                      value: '',
+                      operator: 'notNull'
+                    }
+                  ],
+                  combinator: 'and',
+                  not: false
+                },
+                consequence: {
+                  id: 'TtbSfX9G-7dA9LA8UMLRg',
+                  rules: [
+                    {
+                      id: 'r-WbdOktGAl7SObhQNe6zOZ',
+                      field: 'name',
+                      value: 'chan',
+                      operator: '!='
+                    }
+                  ],
+                  combinator: 'and',
+                  not: false
+                },
+                function: 'R.next()'
+              }
+            ]
+          }
+        ]
+      }}
       queryProps={{
         fields: [{ name: 'name', label: 'Name' }],
         onQueryChange: () => {}
       }}
     />
+    >>
   </Story>
 </Preview>

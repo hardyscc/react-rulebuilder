@@ -16,7 +16,7 @@ export interface GroupProps {
 
 export const Group: React.FC<GroupProps> = ({ queryProps, data, gidx }) => {
   // const [open, setOpen] = React.useState(false)
-  let curentQuery = { json: '', sql: '' }
+  // let curentQuery = { json: '', sql: '' }
 
   // const handleConditionChange = (query: queryType) => {
   //   console.log('handleConditionChange: ' + JSON.stringify(query))
@@ -52,7 +52,10 @@ export const Group: React.FC<GroupProps> = ({ queryProps, data, gidx }) => {
           dispatch({
             type: Action.AddRule,
             gidx: gidx,
-            query: curentQuery
+            priority: 100,
+            // condition: [],
+            // consequence: [],
+            function: "R.next()"
           })
         }}
       >
