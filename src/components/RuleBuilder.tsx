@@ -16,9 +16,8 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   queryProps,
   inputData
 }) => {
-  // const [root, dispatch] = useReducer(reducer, inputData ?? initData)
-  console.log(queryProps)
-  console.log(inputData)
+  // console.log(queryProps)
+  // console.log(inputData)
 
   return (
     <ActionProvider inputData={inputData}>
@@ -33,7 +32,12 @@ const RuleComponent: React.FC<RuleBuilderProps> = ({ queryProps }) => {
   return (
     <div>
       {root.groups.map((group, gidx) => (
-        <Group queryProps={queryProps} data={group} gidx={gidx} />
+        <Group
+          key={'group' + gidx}
+          queryProps={queryProps}
+          data={group}
+          gidx={gidx}
+        />
       ))}
       <button
         onClick={() => {
@@ -42,13 +46,15 @@ const RuleComponent: React.FC<RuleBuilderProps> = ({ queryProps }) => {
       >
         Add Group
       </button>
-      <button
-        onClick={() => {
-          console.log(`view the draft: ${JSON.stringify(root)}`)
-        }}
-      >
-        View
-      </button>
+      <div style={{ display: 'block' }}>
+        <button
+          onClick={() => {
+            console.log(root)
+          }}
+        >
+          View
+        </button>
+      </div>
     </div>
   )
 }

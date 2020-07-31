@@ -16,7 +16,7 @@ import { RuleBuilder } from 'react-rulebuilder'
   <Story name='Default'>
     <RuleBuilder
       queryProps={{
-        fields: [{ name: 'name', label: 'Name' }],
+        fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
       }}
     />
@@ -46,26 +46,17 @@ import { RuleBuilder } from 'react-rulebuilder'
                   rules: [
                     {
                       id: 'r-W_3gdQThrjkBzfiyf9Lq9',
-                      field: 'name',
-                      value: '',
-                      operator: 'notNull'
+                      field: 'age',
+                      value: '0',
+                      operator: '>'
                     }
                   ],
                   combinator: 'and',
                   not: false
                 },
                 consequence: {
-                  id: 'TtbSfX9G-7dA9LA8UMLRg',
-                  rules: [
-                    {
-                      id: 'r-WbdOktGAl7SObhQNe6zOZ',
-                      field: 'name',
-                      value: 'chan',
-                      operator: '!='
-                    }
-                  ],
-                  combinator: 'and',
-                  not: false
+                  field: 'scoreType',
+                  value: 'T'
                 },
                 function: 'R.next()'
               }
@@ -74,7 +65,7 @@ import { RuleBuilder } from 'react-rulebuilder'
         ]
       }}
       queryProps={{
-        fields: [{ name: 'name', label: 'Name' }],
+        fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
       }}
     />

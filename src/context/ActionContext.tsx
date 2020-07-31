@@ -13,30 +13,15 @@ const initData: RuleBuilderData = {
           priority: 100,
           condition: { id: nanoid(), rules: [], combinator: 'and', not: false },
           consequence: {
-            id: nanoid(),
-            rules: [],
-            combinator: 'and',
-            not: false
+            field: 'Score Type',
+            value: 'T'
           },
           function: 'R.next()'
-          // query: {
-          //   json: '',
-          //   sql: ''
-          //   // json:
-          //   //   '{"id":"g-0bdd63ef-c321-4aa2-9475-cd788ab315b6","rules":[{"id":"g-eb_uSpJbCV0ooLFoiQz4y","rules":[{"id":"r-7DH_6mkm0b7QJZcQ6kwBj","field":"sex","value":"","operator":"Female"},{"id":"r-AluDold9Z8KdCZ4WzRUtt","field":"menopause","value":"","operator":"true"}],"combinator":"&&","not":false},{"id":"g-JmdjyR9MGoTIxTAnXR1nB","rules":[{"id":"r-_pDb8LRXnlJR_ZmksKTjO","field":"sex","value":"","operator":"Male"},{"id":"r-sQCeLXjlJ-dLp8zRJzrYZ","field":"age","value":"50","operator":"<"}],"combinator":"&&","not":false}],"combinator":"||","not":false}',
-          //   // sql:
-          //   //   '"( ( ( sex == Female ) && ( menopause == true ) ) || ( ( sex == Male ) && ( age < 50 ) ) ) "'
-          // }
         }
       ]
     }
   ]
 }
-
-// export type queryType = {
-//   json: string
-//   sql: string
-// }
 
 export enum Action {
   AddGroup,
@@ -64,7 +49,8 @@ export type Actions =
       ridx: number
       priority?: number
       condition?: RuleGroupType
-      consequence?: RuleGroupType
+      consequenceField?: string
+      consequenceValue?: string
       function?: string
     }
 
@@ -96,10 +82,8 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
               not: false
             },
             consequence: {
-              id: nanoid(),
-              rules: [],
-              combinator: 'and',
-              not: false
+              field: 'scoreType',
+              value: 'T'
             },
             function: 'R.next()'
           }
@@ -118,9 +102,14 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
         condition:
           action.condition ??
           draft.groups[action.gidx].rules[action.ridx].condition,
-        consequence:
-          action.consequence ??
-          draft.groups[action.gidx].rules[action.ridx].consequence,
+        consequence: {
+          field:
+            action.consequenceField ??
+            draft.groups[action.gidx].rules[action.ridx].consequence.field,
+          value:
+            action.consequenceValue ??
+            draft.groups[action.gidx].rules[action.ridx].consequence.value
+        },
         function:
           action.function ??
           draft.groups[action.gidx].rules[action.ridx].function

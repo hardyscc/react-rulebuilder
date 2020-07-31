@@ -14,10 +14,8 @@ const init: RuleBuilderData = {
           priority: 100,
           condition: { id: nanoid(), rules: [], combinator: 'and', not: false },
           consequence: {
-            id: nanoid(),
-            rules: [],
-            combinator: 'and',
-            not: false
+            field: 'scoreType',
+            value: 'T'
           },
           function: 'R.next()'
         }
@@ -30,10 +28,12 @@ test('Renders', async () => {
     <RuleBuilder
       inputData={init}
       queryProps={{
-        fields: [{ name: 'name', label: 'Name' }],
+        fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
       }}
     />
   )
+  console.log(getByText)
+
   expect(getByText('AND')).toBeInTheDocument()
 })

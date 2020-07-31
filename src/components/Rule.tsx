@@ -9,7 +9,10 @@ export type RuleData = {
   id: string
   priority: number
   condition: RuleGroupType
-  consequence: RuleGroupType
+  consequence: {
+    field: string
+    value: string
+  }
   function: string
 }
 
@@ -21,30 +24,35 @@ export interface RuleProps {
 }
 
 export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
-  // const qProp: QueryBuilderProps = { ...queryProps, translations: { ...queryProps.translations, addGroup: { label: "+Query", title: "Add query" } } };
-
   const { dispatch } = React.useContext(ActionContext)
 
   return (
     <div>
-      <label htmlFor={data.id}>
-        Rule {ridx} - {data.id}
-      </label>
-      <label htmlFor={'priority' + ridx}> Priority: </label>
-      <input
-        type='number'
-        name={'priority' + ridx}
-        defaultValue={data.priority}
-        onChange={v => {
-          console.log(`${data.id} priority: ${v.target.value}`)
-          dispatch({
-            type: Action.UpdateRule,
-            gidx: gidx,
-            ridx: ridx,
-            priority: parseInt(v.target.value)
-          })
+      <label> Rule {ridx} </label>
+      <button
+        onClick={() => {
+          dispatch({ type: Action.DeleteRule, gidx: gidx, ridx: ridx })
         }}
-      />
+      >
+        x
+      </button>
+      <div style={{ display: 'block' }}>
+        <label htmlFor={'priority' + ridx}> Priority: </label>
+        <input
+          type='number'
+          id={'priority' + ridx}
+          defaultValue={data.priority}
+          onChange={v => {
+            // console.log(`${data.id} priority: ${v.target.value}`)
+            dispatch({
+              type: Action.UpdateRule,
+              gidx: gidx,
+              ridx: ridx,
+              priority: parseInt(v.target.value)
+            })
+          }}
+        />
+      </div>
       Condition:{' '}
       <QueryBuilder
         {...{
@@ -56,7 +64,7 @@ export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
             addRule: { label: '+Condition', title: 'Add condition' }
           },
           onQueryChange: (ruleGroup: RuleGroupType) => {
-            console.log(`${data.id} condition: ${JSON.stringify(ruleGroup)}`)
+            // console.log(`${data.id} condition: ${JSON.stringify(ruleGroup)}`)
             dispatch({
               type: Action.UpdateRule,
               gidx: gidx,
@@ -67,47 +75,65 @@ export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
         }}
       />
       Consequence:{' '}
-      <QueryBuilder
-        {...{
-          ...queryProps,
-          query: data.consequence,
-          translations: {
-            ...queryProps.translations,
-            addGroup: { label: '+Statement', title: 'Add statement' },
-            addRule: { label: '+Condition', title: 'Add condition' }
-          },
-          onQueryChange: (ruleGroup: RuleGroupType) => {
-            console.log(`${data.id} consequence: ${JSON.stringify(ruleGroup)}`)
+      <div style={{ display: 'block' }}>
+        <label htmlFor={'consequence-field' + ridx}> Field: </label>
+        <select
+          id={'consequence-field' + ridx}
+          defaultValue={data.consequence.field}
+          onChange={v => {
+            console.log(`${data.id} function: ${v.target.value}`)
             dispatch({
               type: Action.UpdateRule,
               gidx: gidx,
               ridx: ridx,
-              consequence: ruleGroup
+              consequenceField: data.consequence.field
             })
-          }
-        }}
-      />
-      <button
-        onClick={() => {
-          dispatch({ type: Action.DeleteRule, gidx: gidx, ridx: ridx })
-        }}
-      >
-        x
-      </button>
-      <label htmlFor={'function' + ridx}> Function: </label>
-      <input
-        name={'function' + ridx}
-        defaultValue={data.function}
-        onChange={v => {
-          console.log(`${data.id} function: ${v.target.value}`)
-          dispatch({
-            type: Action.UpdateRule,
-            gidx: gidx,
-            ridx: ridx,
-            function: v.target.value
-          })
-        }}
-      />
+          }}
+        >
+          <option
+            key={'scoreType' + ridx}
+            value='scoreType'
+            label='Score Type'
+          />
+          <option
+            key={'implementation' + ridx}
+            value='scoreType'
+            label='Implementation'
+          />
+        </select>
+        <label htmlFor={'consequence-value' + ridx}> Value: </label>
+        <input
+          id={'consequence-value' + ridx}
+          defaultValue={data.consequence.value}
+          onChange={v => {
+            dispatch({
+              type: Action.UpdateRule,
+              gidx: gidx,
+              ridx: ridx,
+              consequenceValue: v.target.value
+            })
+          }}
+        />
+      </div>
+      <div style={{ display: 'block' }}>
+        <label htmlFor={'function' + ridx}> Function: </label>
+        <select
+          id={'function' + ridx}
+          defaultValue={data.function}
+          onChange={v => {
+            console.log(`${data.id} function: ${v.target.value}`)
+            dispatch({
+              type: Action.UpdateRule,
+              gidx: gidx,
+              ridx: ridx,
+              function: v.target.value
+            })
+          }}
+        >
+          <option key={'next' + ridx} value='R.next()' label='R.next()' />
+          <option key={'stop' + ridx} value='R.stop()' label='R.stop()' />
+        </select>
+      </div>
     </div>
   )
 }
