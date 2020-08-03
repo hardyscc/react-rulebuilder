@@ -6,10 +6,8 @@ import { RuleBuilderData } from '../components/RuleBuilder'
 const initData: RuleBuilderData = {
   groups: [
     {
-      id: nanoid(),
       rules: [
         {
-          id: nanoid(),
           priority: 100,
           condition: { id: nanoid(), rules: [], combinator: 'and', not: false },
           consequence: {
@@ -69,11 +67,9 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
       }
     case Action.AddRule:
       draft.groups[action.gidx] = {
-        id: draft.groups[action.gidx].id,
         rules: [
           ...draft.groups[action.gidx].rules,
           {
-            id: nanoid(),
             priority: 100 - action.gidx,
             condition: {
               id: nanoid(),

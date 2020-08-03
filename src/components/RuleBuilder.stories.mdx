@@ -15,6 +15,10 @@ import { RuleBuilder } from 'react-rulebuilder'
 <Preview withSource='open'>
   <Story name='Default'>
     <RuleBuilder
+      consequenceFields={[
+        { value: 'scoreType', label: 'Score Type' },
+        { value: 'impression', label: 'Impression' }
+      ]}
       queryProps={{
         fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
@@ -33,28 +37,26 @@ import { RuleBuilder } from 'react-rulebuilder'
 <Preview withSource='open'>
   <Story name='Advance'>
     <RuleBuilder
+      consequenceFields={[
+        { value: 'scoreType', label: 'Score Type' },
+        { value: 'impression', label: 'Impression' }
+      ]}
       inputData={{
         groups: [
           {
-            id: 'Oqpu5t0lHN6dqZCPSXFov',
             rules: [
               {
-                id: 'LTEAHDME9MCWKEmYRBGbm',
                 priority: 100,
                 condition: {
-                  id: 'qOMyWGupsLapNZZi9Vq15',
                   rules: [
                     {
-                      id: 'g-nQ6H27iP_uqD0mWTwX_Wu',
                       rules: [
                         {
-                          id: 'r-uymFnsXIl_6-MCwKI5o-7',
                           field: 'sex',
                           value: 'Female',
                           operator: '='
                         },
                         {
-                          id: 'r-aUMdryzPnTikXW3HekhY0',
                           field: 'menopause',
                           value: '0',
                           operator: '>'
@@ -64,16 +66,13 @@ import { RuleBuilder } from 'react-rulebuilder'
                       not: false
                     },
                     {
-                      id: 'g-udAW32LJ7LXvLxQG29vz2',
                       rules: [
                         {
-                          id: 'r-cTzpD-qW1cb27hZWTECaY',
                           field: 'sex',
                           value: 'Male',
                           operator: '='
                         },
                         {
-                          id: 'r-4yAuGVJKfa2VTSIFapwqV',
                           field: 'age',
                           value: '50',
                           operator: '<'
