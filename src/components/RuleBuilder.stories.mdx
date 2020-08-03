@@ -23,6 +23,7 @@ import { RuleBuilder } from 'react-rulebuilder'
         fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
       }}
+      getRuleJson={() => { }}
     />
     >
   </Story>
@@ -102,6 +103,10 @@ import { RuleBuilder } from 'react-rulebuilder'
           { name: 'menopause', label: 'Menopause' }
         ],
         onQueryChange: () => {}
+      }}
+      getRuleJson={(json) => { 
+        console.log("advance json output");
+        console.log(json);
       }}
     />
     >>

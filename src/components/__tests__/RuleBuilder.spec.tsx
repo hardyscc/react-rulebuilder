@@ -33,6 +33,7 @@ test('Renders', async () => {
         fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
       }}
+      getRuleJson={() => {}}
     />
   )
   console.log(getByText)

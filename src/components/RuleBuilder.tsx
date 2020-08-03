@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useEffect } from 'react'
 import { QueryBuilderProps } from 'react-querybuilder'
 import { Action, ActionContext, ActionProvider } from '../context/ActionContext'
 import { ConfigProvider } from '../context/ConfigContext'
@@ -17,12 +18,14 @@ export type RuleBuilderProps = {
   queryProps: QueryBuilderProps
   inputData?: RuleBuilderData
   consequenceFields: consequenceFieldType[]
+  getRuleJson: (getRuleJson: RuleBuilderData) => void
 }
 
 export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   queryProps,
   inputData,
-  consequenceFields
+  consequenceFields,
+  getRuleJson
 }) => {
   return (
     <ConfigProvider
@@ -30,14 +33,20 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({
       consequenceFields={consequenceFields}
     >
       <ActionProvider inputData={inputData}>
-        <RuleComponent />
+        <RuleComponent getRuleJson={getRuleJson} />
       </ActionProvider>
     </ConfigProvider>
   )
 }
 
-const RuleComponent: React.FC = () => {
+const RuleComponent: React.FC<{
+  getRuleJson: (getRuleJson: RuleBuilderData) => void
+}> = ({ getRuleJson }) => {
   const { root, dispatch } = React.useContext(ActionContext)
+
+  useEffect(() => {
+    getRuleJson(root)
+  }, [root])
 
   return (
     <div>
@@ -51,15 +60,6 @@ const RuleComponent: React.FC = () => {
       >
         Add Group
       </button>
-      <div style={{ display: 'block' }}>
-        <button
-          onClick={() => {
-            console.log(root)
-          }}
-        >
-          View
-        </button>
-      </div>
     </div>
   )
 }

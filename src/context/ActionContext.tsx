@@ -53,7 +53,6 @@ export type Actions =
     }
 
 const reducer = (draft: RuleBuilderData, action: Actions) => {
-  //  const r =  draft.rules[action.gidx].rules.splice(action.ridx, 1);
   switch (action.type) {
     case Action.AddGroup:
       return {
