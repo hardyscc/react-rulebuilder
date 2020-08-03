@@ -1,25 +1,29 @@
 import { nanoid } from 'nanoid'
 import React from 'react'
-import { QueryBuilderProps } from 'react-querybuilder'
 import { Action, ActionContext } from '../context/ActionContext'
 import { Rule, RuleData } from './Rule'
 
 export type GroupData = {
-  id: string
   rules: RuleData[]
 }
 
 export interface GroupProps {
-  queryProps: QueryBuilderProps
   data: GroupData
   gidx: number
 }
 
-export const Group: React.FC<GroupProps> = ({ queryProps, data, gidx }) => {
+export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
   const { dispatch } = React.useContext(ActionContext)
 
   return (
-    <div style={{ display: 'block', border: "1px solid green", margin: "3px 6px", padding: 3 }}>
+    <div
+      style={{
+        display: 'block',
+        border: '1px solid green',
+        margin: '3px 6px',
+        padding: 3
+      }}
+    >
       <label>Group {gidx}</label>
       <button
         onClick={() => {
@@ -29,7 +33,7 @@ export const Group: React.FC<GroupProps> = ({ queryProps, data, gidx }) => {
         x
       </button>
       {data.rules.map((rule, ridx) => (
-        <Rule key={"rule" + ridx} queryProps={queryProps} data={rule} gidx={gidx} ridx={ridx} />
+        <Rule key={'rule' + ridx} data={rule} gidx={gidx} ridx={ridx} />
       ))}
       <button
         onClick={() => {
@@ -37,9 +41,19 @@ export const Group: React.FC<GroupProps> = ({ queryProps, data, gidx }) => {
             type: Action.AddRule,
             gidx: gidx,
             priority: 100,
-            condition: { id: nanoid(), rules: [], combinator: 'and', not: false },
-            consequence: { id: nanoid(), rules: [], combinator: 'and', not: false },
-            function: "R.next()"
+            condition: {
+              id: nanoid(),
+              rules: [],
+              combinator: 'and',
+              not: false
+            },
+            consequence: {
+              id: nanoid(),
+              rules: [],
+              combinator: 'and',
+              not: false
+            },
+            function: 'R.next()'
           })
         }}
       >

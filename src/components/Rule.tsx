@@ -1,12 +1,9 @@
 import React from 'react'
-import QueryBuilder, {
-  QueryBuilderProps,
-  RuleGroupType
-} from 'react-querybuilder'
+import QueryBuilder, { RuleGroupType } from 'react-querybuilder'
 import { Action, ActionContext } from '../context/ActionContext'
+import { ConfigContext } from '../context/ConfigContext'
 
 export type RuleData = {
-  id: string
   priority: number
   condition: RuleGroupType
   consequence: {
@@ -17,14 +14,14 @@ export type RuleData = {
 }
 
 export interface RuleProps {
-  queryProps: QueryBuilderProps
   data: RuleData
   gidx: number
   ridx: number
 }
 
-export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
+export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
   const { dispatch } = React.useContext(ActionContext)
+  const { queryProps, consequenceFields } = React.useContext(ConfigContext)
 
   return (
     <div
@@ -56,7 +53,6 @@ export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
                 addRule: { label: '+Condition', title: 'Add condition' }
               },
               onQueryChange: (ruleGroup: RuleGroupType) => {
-                // console.log(`${data.id} condition: ${JSON.stringify(ruleGroup)}`)
                 dispatch({
                   type: Action.UpdateRule,
                   gidx: gidx,
@@ -75,25 +71,23 @@ export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
           id={'consequence-field' + ridx}
           defaultValue={data.consequence.field}
           onChange={v => {
-            console.log(`${data.id} function: ${v.target.value}`)
             dispatch({
               type: Action.UpdateRule,
               gidx: gidx,
               ridx: ridx,
-              consequenceField: data.consequence.field
+              consequenceField: v.target.value
             })
           }}
         >
-          <option
-            key={'scoreType' + ridx}
-            value='scoreType'
-            label='Score Type'
-          />
-          <option
-            key={'implementation' + ridx}
-            value='scoreType'
-            label='Implementation'
-          />
+          {consequenceFields.map(field => {
+            return (
+              <option
+                key={field.value + ridx}
+                value={field.value}
+                label={field.label}
+              />
+            )
+          })}
         </select>
         <label htmlFor={'consequence-value' + ridx}> Value: </label>
         <input
@@ -115,7 +109,6 @@ export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
           id={'function' + ridx}
           defaultValue={data.function}
           onChange={v => {
-            console.log(`${data.id} function: ${v.target.value}`)
             dispatch({
               type: Action.UpdateRule,
               gidx: gidx,

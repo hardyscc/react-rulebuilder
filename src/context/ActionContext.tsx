@@ -6,10 +6,8 @@ import { RuleBuilderData } from '../components/RuleBuilder'
 const initData: RuleBuilderData = {
   groups: [
     {
-      id: nanoid(),
       rules: [
         {
-          id: nanoid(),
           priority: 100,
           condition: { id: nanoid(), rules: [], combinator: 'and', not: false },
           consequence: {
@@ -55,7 +53,6 @@ export type Actions =
     }
 
 const reducer = (draft: RuleBuilderData, action: Actions) => {
-  //  const r =  draft.rules[action.gidx].rules.splice(action.ridx, 1);
   switch (action.type) {
     case Action.AddGroup:
       return {
@@ -69,11 +66,9 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
       }
     case Action.AddRule:
       draft.groups[action.gidx] = {
-        id: draft.groups[action.gidx].id,
         rules: [
           ...draft.groups[action.gidx].rules,
           {
-            id: nanoid(),
             priority: 100 - action.gidx,
             condition: {
               id: nanoid(),

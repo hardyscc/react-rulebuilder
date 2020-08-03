@@ -7,10 +7,8 @@ import { RuleBuilderData } from '../RuleBuilder'
 const init: RuleBuilderData = {
   groups: [
     {
-      id: nanoid(),
       rules: [
         {
-          id: nanoid(),
           priority: 100,
           condition: { id: nanoid(), rules: [], combinator: 'and', not: false },
           consequence: {
@@ -27,10 +25,15 @@ test('Renders', async () => {
   const { getByText } = render(
     <RuleBuilder
       inputData={init}
+      consequenceFields={[
+        { value: 'scoreType', label: 'Score Type' },
+        { value: 'impression', label: 'Impression' }
+      ]}
       queryProps={{
         fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
       }}
+      getRuleJson={() => {}}
     />
   )
   console.log(getByText)
