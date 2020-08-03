@@ -27,7 +27,14 @@ export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
   const { dispatch } = React.useContext(ActionContext)
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'block',
+        border: '1px solid blue',
+        margin: '3px 6px',
+        padding: 6
+      }}
+    >
       <label> Rule {ridx} </label>
       <button
         onClick={() => {
@@ -37,43 +44,30 @@ export const Rule: React.FC<RuleProps> = ({ queryProps, data, gidx, ridx }) => {
         x
       </button>
       <div style={{ display: 'block' }}>
-        <label htmlFor={'priority' + ridx}> Priority: </label>
-        <input
-          type='number'
-          id={'priority' + ridx}
-          defaultValue={data.priority}
-          onChange={v => {
-            // console.log(`${data.id} priority: ${v.target.value}`)
-            dispatch({
-              type: Action.UpdateRule,
-              gidx: gidx,
-              ridx: ridx,
-              priority: parseInt(v.target.value)
-            })
-          }}
-        />
+        Condition:{' '}
+        <div style={{ border: '1px solid black', padding: 3 }}>
+          <QueryBuilder
+            {...{
+              ...queryProps,
+              query: data.condition,
+              translations: {
+                ...queryProps.translations,
+                addGroup: { label: '+Statement', title: 'Add statement' },
+                addRule: { label: '+Condition', title: 'Add condition' }
+              },
+              onQueryChange: (ruleGroup: RuleGroupType) => {
+                // console.log(`${data.id} condition: ${JSON.stringify(ruleGroup)}`)
+                dispatch({
+                  type: Action.UpdateRule,
+                  gidx: gidx,
+                  ridx: ridx,
+                  condition: ruleGroup
+                })
+              }
+            }}
+          />
+        </div>
       </div>
-      Condition:{' '}
-      <QueryBuilder
-        {...{
-          ...queryProps,
-          query: data.condition,
-          translations: {
-            ...queryProps.translations,
-            addGroup: { label: '+Statement', title: 'Add statement' },
-            addRule: { label: '+Condition', title: 'Add condition' }
-          },
-          onQueryChange: (ruleGroup: RuleGroupType) => {
-            // console.log(`${data.id} condition: ${JSON.stringify(ruleGroup)}`)
-            dispatch({
-              type: Action.UpdateRule,
-              gidx: gidx,
-              ridx: ridx,
-              condition: ruleGroup
-            })
-          }
-        }}
-      />
       Consequence:{' '}
       <div style={{ display: 'block' }}>
         <label htmlFor={'consequence-field' + ridx}> Field: </label>

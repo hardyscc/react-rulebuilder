@@ -45,13 +45,45 @@ import { RuleBuilder } from 'react-rulebuilder'
                   id: 'qOMyWGupsLapNZZi9Vq15',
                   rules: [
                     {
-                      id: 'r-W_3gdQThrjkBzfiyf9Lq9',
-                      field: 'age',
-                      value: '0',
-                      operator: '>'
+                      id: 'g-nQ6H27iP_uqD0mWTwX_Wu',
+                      rules: [
+                        {
+                          id: 'r-uymFnsXIl_6-MCwKI5o-7',
+                          field: 'sex',
+                          value: 'Female',
+                          operator: '='
+                        },
+                        {
+                          id: 'r-aUMdryzPnTikXW3HekhY0',
+                          field: 'menopause',
+                          value: '0',
+                          operator: '>'
+                        }
+                      ],
+                      combinator: 'and',
+                      not: false
+                    },
+                    {
+                      id: 'g-udAW32LJ7LXvLxQG29vz2',
+                      rules: [
+                        {
+                          id: 'r-cTzpD-qW1cb27hZWTECaY',
+                          field: 'sex',
+                          value: 'Male',
+                          operator: '='
+                        },
+                        {
+                          id: 'r-4yAuGVJKfa2VTSIFapwqV',
+                          field: 'age',
+                          value: '50',
+                          operator: '<'
+                        }
+                      ],
+                      combinator: 'and',
+                      not: false
                     }
                   ],
-                  combinator: 'and',
+                  combinator: 'or',
                   not: false
                 },
                 consequence: {
@@ -65,7 +97,11 @@ import { RuleBuilder } from 'react-rulebuilder'
         ]
       }}
       queryProps={{
-        fields: [{ name: 'age', label: 'Age' }],
+        fields: [
+          { name: 'age', label: 'Age' },
+          { name: 'sex', label: 'Sex' },
+          { name: 'menopause', label: 'Menopause' }
+        ],
         onQueryChange: () => {}
       }}
     />

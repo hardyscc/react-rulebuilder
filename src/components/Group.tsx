@@ -19,7 +19,7 @@ export const Group: React.FC<GroupProps> = ({ queryProps, data, gidx }) => {
   const { dispatch } = React.useContext(ActionContext)
 
   return (
-    <div>
+    <div style={{ display: 'block', border: "1px solid green", margin: "3px 6px", padding: 3 }}>
       <label>Group {gidx}</label>
       <button
         onClick={() => {

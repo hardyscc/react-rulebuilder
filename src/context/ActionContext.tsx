@@ -74,7 +74,7 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
           ...draft.groups[action.gidx].rules,
           {
             id: nanoid(),
-            priority: 100,
+            priority: 100 - action.gidx,
             condition: {
               id: nanoid(),
               rules: [],
@@ -96,9 +96,6 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
     case Action.UpdateRule:
       draft.groups[action.gidx].rules[action.ridx] = {
         ...draft.groups[action.gidx].rules[action.ridx],
-        priority:
-          action.priority ??
-          draft.groups[action.gidx].rules[action.ridx].priority,
         condition:
           action.condition ??
           draft.groups[action.gidx].rules[action.ridx].condition,
