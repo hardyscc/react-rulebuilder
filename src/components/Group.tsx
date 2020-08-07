@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid'
 import React from 'react'
 import { Action, ActionContext } from '../context/ActionContext'
+import { ConfigContext } from '../context/ConfigContext'
 import { Rule, RuleData } from './Rule'
 
 export type GroupData = {
@@ -14,15 +15,11 @@ export interface GroupProps {
 
 export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
   const { dispatch } = React.useContext(ActionContext)
+  const { controlElements } = React.useContext(ConfigContext)
 
   return (
-    <div
-      style={{
-        display: 'block',
-        border: '1px solid green',
-        margin: '3px 6px',
-        padding: 3
-      }}
+    <controlElements.groupTag
+      className="group"
     >
       <label>Group {gidx}</label>
       <button
@@ -59,6 +56,6 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
       >
         Add Rule
       </button>
-    </div>
+    </controlElements.groupTag>
   )
 }

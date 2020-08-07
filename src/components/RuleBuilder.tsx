@@ -2,8 +2,9 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { QueryBuilderProps } from 'react-querybuilder'
 import { Action, ActionContext, ActionProvider } from '../context/ActionContext'
-import { ConfigProvider } from '../context/ConfigContext'
+import { ConfigProvider, Controls } from '../context/ConfigContext'
 import { Group, GroupData } from './Group'
+import './RuleBuilder.css'
 
 export type RuleBuilderData = {
   groups: GroupData[]
@@ -18,6 +19,7 @@ export type RuleBuilderProps = {
   queryProps: QueryBuilderProps
   inputData?: RuleBuilderData
   consequenceFields: consequenceFieldType[]
+  controlElements?: Partial<Controls>
   getRuleJson: (getRuleJson: RuleBuilderData) => void
 }
 
@@ -25,12 +27,14 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   queryProps,
   inputData,
   consequenceFields,
+  controlElements,
   getRuleJson
 }) => {
   return (
     <ConfigProvider
       queryProps={queryProps}
       consequenceFields={consequenceFields}
+      controlElements={controlElements}
     >
       <ActionProvider inputData={inputData}>
         <RuleComponent getRuleJson={getRuleJson} />

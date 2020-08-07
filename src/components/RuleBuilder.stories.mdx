@@ -1,6 +1,7 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks'
 
 import { RuleBuilder, RuleBuilderProps } from './RuleBuilder'
+import GroupTagCopy from '../controls/GroupTagCopy'
 
 <Meta title='Components/RuleBuilder' component={RuleBuilder} />
 
@@ -23,7 +24,8 @@ import { RuleBuilder } from 'react-rulebuilder'
         fields: [{ name: 'age', label: 'Age' }],
         onQueryChange: () => {}
       }}
-      getRuleJson={() => { }}
+      getRuleJson={() => {}}
+      controlElements={{ groupTag: GroupTagCopy }}
     />
     >
   </Story>
@@ -104,9 +106,9 @@ import { RuleBuilder } from 'react-rulebuilder'
         ],
         onQueryChange: () => {}
       }}
-      getRuleJson={(json) => { 
-        console.log("advance json output");
-        console.log(json);
+      getRuleJson={json => {
+        console.log('advance json output')
+        console.log(json)
       }}
     />
     >>
