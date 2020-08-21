@@ -6,6 +6,7 @@ import { Rule, RuleData } from './Rule'
 
 export type GroupData = {
   rules: RuleData[]
+  groupDefination?: string
 }
 
 export interface GroupProps {
@@ -15,13 +16,42 @@ export interface GroupProps {
 
 export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
   const { dispatch } = React.useContext(ActionContext)
-  const { controlElements } = React.useContext(ConfigContext)
+  const { controlElements, controlClassnames, getGroupIndex, consequenceFields } = React.useContext(ConfigContext)
+
+  getGroupIndex ? getGroupIndex(gidx) : null;
 
   return (
     <controlElements.groupTag
-      className="group"
+      className={controlClassnames.group}
+      label="Group"
+      gidx={gidx}
     >
-      <label>Group {gidx}</label>
+      <select
+        id={`group-defination-${gidx}`}
+        title={`group-defination-${gidx}`}
+        value={data.groupDefination}
+        onChange={v => {
+          dispatch({
+            type: Action.UpdateGroup,
+            gidx: gidx,
+            groupDefination: v.target.value
+          })
+        }}
+      >
+        <option
+          key="group-defination-undefined"
+          label="Please select"
+        />
+        {consequenceFields.map(field => {
+          return (
+            <option
+              key={field.value + gidx}
+              value={field.value}
+              label={field.label}
+            />
+          )
+        })}
+      </select>
       <button
         onClick={() => {
           dispatch({ type: Action.DeleteGroup, gidx: gidx })
@@ -30,7 +60,7 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
         x
       </button>
       {data.rules.map((rule, ridx) => (
-        <Rule key={'rule' + ridx} data={rule} gidx={gidx} ridx={ridx} />
+        <Rule key={'rule' + ridx} data={rule} parent={data} gidx={gidx} ridx={ridx} />
       ))}
       <button
         onClick={() => {
@@ -50,7 +80,7 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
               combinator: 'and',
               not: false
             },
-            function: 'R.next()'
+            flow: 'R.next()'
           })
         }}
       >

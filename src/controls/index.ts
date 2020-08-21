@@ -1,4 +1,6 @@
 export { default as ActionElement } from './ActionElement'
 export { default as GroupTag } from './GroupTag'
+export { default as RuleTag } from './RuleTag'
+export { default as SectionTag } from './SectionTag'
+export { default as SelectElement } from './SelectElement'
 export { default as ValueEditor } from './ValueEditor'
-export { default as ValueSelector } from './ValueSelector'

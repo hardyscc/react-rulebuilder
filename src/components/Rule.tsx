@@ -2,6 +2,7 @@ import React from 'react'
 import QueryBuilder, { RuleGroupType } from 'react-querybuilder'
 import { Action, ActionContext } from '../context/ActionContext'
 import { ConfigContext } from '../context/ConfigContext'
+import { GroupData } from './Group'
 
 export type RuleData = {
   priority: number
@@ -10,29 +11,32 @@ export type RuleData = {
     field: string
     value: string
   }
-  function: string
+  flow: string
 }
 
 export interface RuleProps {
   data: RuleData
+  parent: GroupData
   gidx: number
   ridx: number
 }
 
 export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
   const { dispatch } = React.useContext(ActionContext)
-  const { queryProps, consequenceFields } = React.useContext(ConfigContext)
+  const {
+    controlElements,
+    controlClassnames,
+    queryProps,
+    consequenceFields
+  } = React.useContext(ConfigContext)
 
   return (
-    <div
-      style={{
-        display: 'block',
-        border: '1px solid blue',
-        margin: '3px 6px',
-        padding: 6
-      }}
+    <controlElements.ruleTag
+      className={controlClassnames.rule}
+      label='Rule'
+      gidx={gidx}
+      ridx={ridx}
     >
-      <label> Rule {ridx} </label>
       <button
         onClick={() => {
           dispatch({ type: Action.DeleteRule, gidx: gidx, ridx: ridx })
@@ -40,36 +44,40 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
       >
         x
       </button>
-      <div style={{ display: 'block' }}>
-        Condition:{' '}
-        <div style={{ border: '1px solid black', padding: 3 }}>
-          <QueryBuilder
-            {...{
-              ...queryProps,
-              query: data.condition,
-              translations: {
-                ...queryProps.translations,
-                addGroup: { label: '+Statement', title: 'Add statement' },
-                addRule: { label: '+Condition', title: 'Add condition' }
-              },
-              onQueryChange: (ruleGroup: RuleGroupType) => {
-                dispatch({
-                  type: Action.UpdateRule,
-                  gidx: gidx,
-                  ridx: ridx,
-                  condition: ruleGroup
-                })
-              }
-            }}
-          />
-        </div>
-      </div>
-      Consequence:{' '}
-      <div style={{ display: 'block' }}>
-        <label htmlFor={'consequence-field' + ridx}> Field: </label>
+
+      <controlElements.conditionTag
+        className={controlClassnames.condition}
+        label='Condition'
+      >
+        <QueryBuilder
+          {...{
+            ...queryProps,
+            query: data.condition,
+            translations: {
+              ...queryProps.translations,
+              addGroup: { label: '+Statement', title: 'Add statement' },
+              addRule: { label: '+Condition', title: 'Add condition' }
+            },
+            onQueryChange: (ruleGroup: RuleGroupType) => {
+              dispatch({
+                type: Action.UpdateRule,
+                gidx: gidx,
+                ridx: ridx,
+                condition: ruleGroup
+              })
+            }
+          }}
+        />
+      </controlElements.conditionTag>
+
+      <controlElements.consequenceTag
+        className={controlClassnames.consequence}
+        label='Consequence'
+      >
+        <label htmlFor={`consequence-field-${gidx}-${ridx}`}> Field: </label>
         <select
-          id={'consequence-field' + ridx}
-          defaultValue={data.consequence.field}
+          id={`consequence-field-${gidx}-${ridx}`}
+          value={data.consequence.field}
           onChange={v => {
             dispatch({
               type: Action.UpdateRule,
@@ -78,7 +86,9 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
               consequenceField: v.target.value
             })
           }}
+          disabled
         >
+          <option key='consequence-field-undefined' label='' />
           {consequenceFields.map(field => {
             return (
               <option
@@ -89,10 +99,10 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
             )
           })}
         </select>
-        <label htmlFor={'consequence-value' + ridx}> Value: </label>
+        <label htmlFor={`consequence-value-${gidx}-${ridx}`}> Value: </label>
         <input
-          id={'consequence-value' + ridx}
-          defaultValue={data.consequence.value}
+          id={`consequence-value-${gidx}-${ridx}`}
+          value={data.consequence.value}
           onChange={v => {
             dispatch({
               type: Action.UpdateRule,
@@ -102,25 +112,29 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
             })
           }}
         />
-      </div>
-      <div style={{ display: 'block' }}>
-        <label htmlFor={'function' + ridx}> Function: </label>
+      </controlElements.consequenceTag>
+
+      <controlElements.flowTag
+        className={controlClassnames.flow}
+        label='Flow Control'
+      >
+        <label htmlFor={`flow-${gidx}-${ridx}`}> Going: </label>
         <select
-          id={'function' + ridx}
-          defaultValue={data.function}
+          id={`flow-${gidx}-${ridx}`}
+          value={data.flow}
           onChange={v => {
             dispatch({
               type: Action.UpdateRule,
               gidx: gidx,
               ridx: ridx,
-              function: v.target.value
+              flow: v.target.value
             })
           }}
         >
-          <option key={'next' + ridx} value='R.next()' label='R.next()' />
-          <option key={'stop' + ridx} value='R.stop()' label='R.stop()' />
+          <option key={'next' + ridx} value='R.next()' label='Next' />
+          <option key={'stop' + ridx} value='R.stop()' label='Stop' />
         </select>
-      </div>
-    </div>
+      </controlElements.flowTag>
+    </controlElements.ruleTag>
   )
 }

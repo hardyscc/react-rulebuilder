@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { useEffect } from 'react'
-import { QueryBuilderProps } from 'react-querybuilder'
 import { Action, ActionContext, ActionProvider } from '../context/ActionContext'
-import { ConfigProvider, Controls } from '../context/ConfigContext'
+import { ConfigConextProps, ConfigProvider } from '../context/ConfigContext'
 import { Group, GroupData } from './Group'
 import './RuleBuilder.css'
 
@@ -16,54 +15,59 @@ export type consequenceFieldType = {
 }
 
 export type RuleBuilderProps = {
-  queryProps: QueryBuilderProps
   inputData?: RuleBuilderData
-  consequenceFields: consequenceFieldType[]
-  controlElements?: Partial<Controls>
-  getRuleJson: (getRuleJson: RuleBuilderData) => void
-}
+  onRulesChange: (onRulesChange: RuleBuilderData) => void
+} & ConfigConextProps
 
 export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   queryProps,
   inputData,
   consequenceFields,
   controlElements,
-  getRuleJson
+  controlClassnames,
+  onRulesChange,
+  getGroupIndex
 }) => {
   return (
     <ConfigProvider
       queryProps={queryProps}
       consequenceFields={consequenceFields}
       controlElements={controlElements}
+      controlClassnames={controlClassnames}
+      getGroupIndex={getGroupIndex}
     >
       <ActionProvider inputData={inputData}>
-        <RuleComponent getRuleJson={getRuleJson} />
+        <RuleComponent onRulesChange={onRulesChange} />
       </ActionProvider>
     </ConfigProvider>
   )
 }
 
 const RuleComponent: React.FC<{
-  getRuleJson: (getRuleJson: RuleBuilderData) => void
-}> = ({ getRuleJson }) => {
+  onRulesChange: (onRulesChange: RuleBuilderData) => void
+}> = ({ onRulesChange }) => {
   const { root, dispatch } = React.useContext(ActionContext)
 
   useEffect(() => {
-    getRuleJson(root)
+    onRulesChange(root)
   }, [root])
 
   return (
-    <div>
-      {root.groups.map((group, gidx) => (
-        <Group key={'group' + gidx} data={group} gidx={gidx} />
-      ))}
-      <button
-        onClick={() => {
-          dispatch({ type: Action.AddGroup })
-        }}
-      >
-        Add Group
-      </button>
-    </div>
+    <>
+      <div style={{ display: 'inline' }}>
+        <button
+          onClick={() => {
+            dispatch({ type: Action.AddGroup })
+          }}
+        >
+          Add Group
+        </button>
+        <div>
+          {root.groups.map((group, gidx) => (
+            <Group key={'group' + gidx} data={group} gidx={gidx} />
+          ))}
+        </div>
+      </div>
+    </>
   )
 }
