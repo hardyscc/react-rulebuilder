@@ -1,15 +1,16 @@
 import React from 'react'
-import { ActionProps } from 'react-querybuilder'
+import { ActionElementProps } from '../context/ConfigContext'
 
-const ActionElement: React.FC<ActionProps> = ({
+const ActionElement: React.FC<ActionElementProps> = ({
   className,
   handleOnClick,
   label,
   title
 }) => (
-  <button className={className} title={title} onClick={e => handleOnClick(e)}>
-    {label}
-  </button>
+  <>
+    <label htmlFor={title}>{label}</label>
+    <button className={className} id={title} onClick={e => handleOnClick(e)} />
+  </>
 )
 
 ActionElement.displayName = 'ActionElement'
