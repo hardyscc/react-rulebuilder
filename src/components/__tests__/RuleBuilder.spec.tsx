@@ -118,18 +118,21 @@ const init: RuleBuilderData = {
 }
 test('Renders', async () => {
   const { getByText } = render(
-    <RuleBuilder
-      inputData={init}
-      consequenceFields={[
-        { value: 'scoreType', label: 'Score Type' },
-        { value: 'impression', label: 'Impression' }
-      ]}
-      queryProps={{
-        fields: [{ name: 'age', label: 'Age' }],
-        onQueryChange: () => {}
-      }}
-      onRulesChange={() => {}}
-    />
+    <>
+      <RuleBuilder
+        inputData={init}
+        consequenceFields={[
+          { value: 'scoreType', label: 'Score Type' },
+          { value: 'impression', label: 'Impression' }
+        ]}
+        queryProps={{
+          fields: [{ name: 'age', label: 'Age' }],
+          onQueryChange: () => {}
+        }}
+        onRulesChange={() => {}}
+        controlClassnames={{ flow: 'none' }}
+      />
+    </>
   )
   console.log(getByText)
 

@@ -1,74 +1,52 @@
 import React from 'react'
-import { ValueEditorProps } from 'react-querybuilder'
+import { ValueEditorProps } from '../context/ConfigContext'
 
 const ValueEditor: React.FC<ValueEditorProps> = ({
-  operator,
   value,
   handleOnChange,
   title,
   className,
   type,
   inputType,
-  values
+  values,
+  label,
+  disabled
 }) => {
-  if (operator === 'null' || operator === 'notNull') {
-    return null
-  }
-
   switch (type) {
     case 'select':
       return (
-        <select
-          className={className}
-          title={title}
-          onChange={e => handleOnChange(e.target.value)}
-          value={value}
-        >
-          {values!.map(v => (
-            <option key={v.name} value={v.name}>
-              {v.label}
-            </option>
-          ))}
-        </select>
-      )
-
-    case 'checkbox':
-      return (
-        <input
-          type='checkbox'
-          className={className}
-          title={title}
-          onChange={e => handleOnChange(e.target.checked)}
-          checked={!!value}
-        />
-      )
-
-    case 'radio':
-      return (
-        <span className={className} title={title}>
-          {values!.map(v => (
-            <label key={v.name}>
-              <input
-                type='radio'
-                value={v.name}
-                checked={value === v.name}
-                onChange={e => handleOnChange(e.target.value)}
-              />
-              {v.label}
-            </label>
-          ))}
-        </span>
+        <>
+          <label htmlFor={title}>{label}</label>
+          <select
+            id={title}
+            className={className}
+            onChange={e => handleOnChange(e.target.value)}
+            value={value}
+            disabled={disabled}
+          >
+            {values!.map(v => {
+              return (
+                <option key={`${title}-${v.value}`} value={v.value}>
+                  {v.label}
+                </option>
+              )
+            })}
+          </select>
+        </>
       )
 
     default:
       return (
-        <input
-          type={inputType || 'text'}
-          value={value}
-          title={title}
-          className={className}
-          onChange={e => handleOnChange(e.target.value)}
-        />
+        <>
+          <label htmlFor={title}>{label}</label>
+          <input
+            id={title}
+            type={inputType || 'text'}
+            value={value}
+            className={className}
+            onChange={e => handleOnChange(e.target.value)}
+          />
+        </>
       )
   }
 }

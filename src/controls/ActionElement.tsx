@@ -8,8 +8,9 @@ const ActionElement: React.FC<ActionElementProps> = ({
   title
 }) => (
   <>
-    <label htmlFor={title}>{label}</label>
-    <button className={className} id={title} onClick={e => handleOnClick(e)} />
+    <button className={className} id={title} onClick={e => handleOnClick(e)}>
+      {label}
+    </button>
   </>
 )
 

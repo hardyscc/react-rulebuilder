@@ -1,9 +1,16 @@
+.ruleBuilder {
+  display: inline;
+}
 .group {
   padding: 0.5rem;
   margin: 0.5rem;
   border: 1px solid #00b150;
   border-radius: 4px;
   /* background: rgba(0, 75, 183, 0.2); */
+}
+.group label,
+.child {
+  display: inline;
 }
 .groupRule {
   padding: 0.5rem;
@@ -21,4 +28,10 @@
   border: 1px solid #050505;
   border-radius: 4px;
   display: block;
+}
+.addGroup {
+  display: inline;
+}
+.none {
+  display: none;
 }

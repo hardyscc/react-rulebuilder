@@ -1,87 +1,127 @@
 import React, { createContext } from 'react'
 import { QueryBuilderProps } from 'react-querybuilder'
 import { consequenceFieldType } from '../components/RuleBuilder'
-import { GroupTag, SectionTag } from '../controls'
+import { ActionElement, GroupTag, SectionTag, ValueEditor } from '../controls'
 import RuleTag from '../controls/RuleTag'
 
-export type GroupTagProps = { className: string, label: string, gidx: number }
-export type RuleTagProps = { className: string, label: string, gidx: number, ridx: number }
-export type SectionTagProps = { className: string, label: string }
+export type GroupTagProps = { className: string; label: string; gidx: number }
+export type RuleTagProps = {
+  className: string
+  label: string
+  gidx: number
+  ridx: number
+}
+export type SectionTagProps = { className: string; label: string }
 
 export type ActionElementProps = {
-  className: string,
-  handleOnClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
-  title: string,
-  label: string,
-  value: string
+  className: string
+  handleOnClick: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void
+  title: string
+  label: string
 }
 
-export type SelectElementProps = {
-  className: string,
-  handleOnChange: (event: string) => void,
-  options: { label: string, value: string }[],
-  title: string,
-  label: string,
-  value: string
+export type ValueEditorProps = {
+  value?: string
+  handleOnChange: (event: string) => void
+  title: string
+  className: string
+  type: string
+  inputType?: string
+  values?: any[]
+  label: string
+  disabled?: boolean
 }
-
 
 export type Classnames = {
-  group: string;
-  rule: string;
-  condition: string;
-  consequence: string;
-  flow: string;
-  addGroup: string;
-  addRule: string;
-  removeGroup: string;
-  removeRule: string;
+  ruleBuilder: string
+  group: string
+  groupDefination: string
+  rule: string
+  condition: string
+  consequence: string
+  consequenceField: string
+  consequenceValue: string
+  flow: string
+  flowValue: string
+  addGroup: string
+  addRule: string
+  removeGroup: string
+  removeRule: string
 }
 
 export type Translations = {
   groupTag: {
     label: string
-    title: string;
-  };
-  ruleTag: { label: string };
-  conditionTag: { label: string };
+    title: string
+  }
+  groupDefination: {
+    label: string
+    title: string
+  }
+  ruleTag: { label: string }
+  conditionTag: { label: string }
   consequenceTag: {
     label: string
-    title: string;
-  };
+    title: string
+  }
+  consequenceField: {
+    label: string
+    title: string
+  }
+  consequenceValue: {
+    label: string
+    title: string
+  }
   flowTag: {
     label: string
-    title: string;
-  };
+  }
+  flowValue: {
+    label: string
+    title: string
+  }
   addGroup: {
-    label: string;
-    title: string;
-  };
+    label: string
+    title: string
+  }
   addRule: {
-    label: string;
-    title: string;
-  };
+    label: string
+    title: string
+  }
   removeGroup: {
-    label: string;
-    title: string;
-  };
+    label: string
+    title: string
+  }
   removeRule: {
-    label: string;
-    title: string;
-  };
+    label: string
+    title: string
+  }
 }
 
 export type Controls = {
   groupTag: React.ComponentType<GroupTagProps>
   ruleTag: React.ComponentType<RuleTagProps>
+  groupDefinationInput: React.ComponentType<ValueEditorProps>
   conditionTag: React.ComponentType<SectionTagProps>
   consequenceTag: React.ComponentType<SectionTagProps>
+  consequenceFieldInput: React.ComponentType<ValueEditorProps>
+  consequenceValueInput: React.ComponentType<ValueEditorProps>
   flowTag: React.ComponentType<SectionTagProps>
+  flowInput: React.ComponentType<ValueEditorProps>
+  addGroup: React.ComponentType<ActionElementProps>
+  addRule: React.ComponentType<ActionElementProps>
+  removeGroup: React.ComponentType<ActionElementProps>
+  removeRule: React.ComponentType<ActionElementProps>
 }
 
 const defaultTranslations: Translations = {
   groupTag: {
     label: 'Group',
+    title: 'group-defination'
+  },
+  groupDefination: {
+    label: '',
     title: 'group-defination'
   },
   ruleTag: { label: 'Rule' },
@@ -90,76 +130,111 @@ const defaultTranslations: Translations = {
     label: 'Consequence',
     title: 'consequence'
   },
+  consequenceField: {
+    label: 'Field',
+    title: 'consequence-field'
+  },
+  consequenceValue: {
+    label: 'Value',
+    title: 'consequence-value'
+  },
   flowTag: {
+    label: 'Flow Control'
+  },
+  flowValue: {
     label: 'Flow',
-    title: 'flow'
+    title: 'flow-value'
   },
   addGroup: {
-    label: '+Group',
-    title: 'Add group'
+    label: 'Add Group',
+    title: 'add-group'
   },
   addRule: {
-    label: '+Rule',
-    title: 'Add rule'
+    label: 'Add Rule',
+    title: 'add-rule'
   },
   removeGroup: {
     label: 'x',
-    title: 'Remove group'
+    title: 'remove-group'
   },
   removeRule: {
     label: 'x',
-    title: 'Remove rule'
-  },
-};
+    title: 'remove-rule'
+  }
+}
 
 const defaultControlClassnames: Classnames = {
-  group: "group",
-  rule: "groupRule",
-  condition: "section",
-  consequence: "section",
-  flow: "section",
-  addGroup: "addGroup",
-  addRule: "addRule",
-  removeGroup: "removeGroup",
-  removeRule: "removeRule",
+  ruleBuilder: 'ruleBuilder',
+  group: 'group',
+  groupDefination: 'groupDefination',
+  rule: 'groupRule',
+  condition: 'section',
+  consequence: 'section',
+  consequenceField: 'consequenceField',
+  consequenceValue: 'consequenceValue',
+  flow: 'section',
+  flowValue: 'flowValue',
+  addGroup: 'addGroup',
+  addRule: 'addRule',
+  removeGroup: 'removeGroup',
+  removeRule: 'removeRule'
 }
 
 const defaultControlElements: Controls = {
   groupTag: GroupTag,
   ruleTag: RuleTag,
+  groupDefinationInput: ValueEditor,
   conditionTag: SectionTag,
   consequenceTag: SectionTag,
+  consequenceFieldInput: ValueEditor,
+  consequenceValueInput: ValueEditor,
   flowTag: SectionTag,
+  flowInput: ValueEditor,
+  addGroup: ActionElement,
+  addRule: ActionElement,
+  removeGroup: ActionElement,
+  removeRule: ActionElement
 }
 
 export type ConfigType = {
   queryProps: QueryBuilderProps
   consequenceFields: consequenceFieldType[]
   controlElements: Controls
+  translations: Translations
   controlClassnames: Classnames
-  getGroupIndex?: (gidx: number) => number
+  displayConditionFirst: boolean
 }
 
 export type ConfigConextProps = {
   queryProps: QueryBuilderProps
   consequenceFields: consequenceFieldType[]
   controlElements?: Partial<Controls>
+  translations?: Partial<Translations>
   controlClassnames?: Partial<Classnames>
-  getGroupIndex?: (gidx: number) => number
+  displayConditionFirst?: boolean
 }
 
 const ConfigContext = createContext<ConfigType>({
   queryProps: {
     fields: [],
-    onQueryChange: () => { }
+    onQueryChange: () => {}
   },
   consequenceFields: [],
   controlElements: { ...defaultControlElements },
+  translations: { ...defaultTranslations },
   controlClassnames: { ...defaultControlClassnames },
-  getGroupIndex: (gidx: 0) => gidx
+  displayConditionFirst: true
 })
 
-const ConfigProvider: React.FC<ConfigConextProps> = ({ queryProps, consequenceFields, controlElements, controlClassnames, getGroupIndex, children }) => {
+const ConfigProvider: React.FC<ConfigConextProps> = ({
+  queryProps,
+  consequenceFields,
+  controlElements,
+  translations,
+  controlClassnames,
+  children,
+  displayConditionFirst
+}) => {
   return (
     <ConfigContext.Provider
       value={{
@@ -168,10 +243,13 @@ const ConfigProvider: React.FC<ConfigConextProps> = ({ queryProps, consequenceFi
         controlElements: controlElements
           ? { ...defaultControlElements, ...controlElements }
           : defaultControlElements,
+        translations: translations
+          ? { ...defaultTranslations, ...translations }
+          : defaultTranslations,
         controlClassnames: controlClassnames
           ? { ...defaultControlClassnames, ...controlClassnames }
           : defaultControlClassnames,
-        getGroupIndex
+        displayConditionFirst: displayConditionFirst ?? true
       }}
     >
       {children}
@@ -180,4 +258,3 @@ const ConfigProvider: React.FC<ConfigConextProps> = ({ queryProps, consequenceFi
 }
 
 export { ConfigProvider, ConfigContext }
-

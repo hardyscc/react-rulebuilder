@@ -16,9 +16,7 @@ export interface GroupProps {
 
 export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
   const { dispatch } = React.useContext(ActionContext)
-  const { controlElements, controlClassnames, getGroupIndex, consequenceFields } = React.useContext(ConfigContext)
-
-  getGroupIndex ? getGroupIndex(gidx) : null;
+  const { controlElements, translations, controlClassnames, consequenceFields } = React.useContext(ConfigContext)
 
   return (
     <controlElements.groupTag
@@ -26,44 +24,35 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
       label="Group"
       gidx={gidx}
     >
-      <select
-        id={`group-defination-${gidx}`}
-        title={`group-defination-${gidx}`}
+      <controlElements.groupDefinationInput
         value={data.groupDefination}
-        onChange={v => {
+        handleOnChange={v => {
           dispatch({
             type: Action.UpdateGroup,
             gidx: gidx,
-            groupDefination: v.target.value
+            groupDefination: v
           })
         }}
-      >
-        <option
-          key="group-defination-undefined"
-          label="Please select"
-        />
-        {consequenceFields.map(field => {
-          return (
-            <option
-              key={field.value + gidx}
-              value={field.value}
-              label={field.label}
-            />
-          )
-        })}
-      </select>
-      <button
-        onClick={() => {
+        title={translations.groupDefination.title + `-${gidx}`}
+        className={controlClassnames.groupDefination}
+        type="select"
+        values={[{ value: undefined, label: 'Please select' }, ...consequenceFields]}
+        label={translations.groupDefination.label}
+      />
+      <controlElements.removeGroup
+        className={controlClassnames.removeGroup}
+        handleOnClick={() => {
           dispatch({ type: Action.DeleteGroup, gidx: gidx })
         }}
-      >
-        x
-      </button>
+        label={translations.removeGroup.label}
+        title={translations.removeGroup.title + `-${gidx}`}
+      />
       {data.rules.map((rule, ridx) => (
         <Rule key={'rule' + ridx} data={rule} parent={data} gidx={gidx} ridx={ridx} />
       ))}
-      <button
-        onClick={() => {
+      <controlElements.addRule
+        className={controlClassnames.addRule}
+        handleOnClick={() => {
           dispatch({
             type: Action.AddRule,
             gidx: gidx,
@@ -83,9 +72,9 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
             flow: 'R.next()'
           })
         }}
-      >
-        Add Rule
-      </button>
+        label={translations.addRule.label}
+        title={translations.addRule.title + `-${gidx}`}
+      />
     </controlElements.groupTag>
   )
 }

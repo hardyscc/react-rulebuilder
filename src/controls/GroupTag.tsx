@@ -8,8 +8,10 @@ const GroupTag: React.FC<GroupTagProps> = ({
   gidx
 }) => (
   <div className={className}>
-    {label} {gidx}
-    {children}
+    <label>
+      {label} {gidx}
+    </label>
+    <div className='child'>{children}</div>
   </div>
 )
 

@@ -1,7 +1,11 @@
 import * as React from 'react'
 import { useEffect } from 'react'
 import { Action, ActionContext, ActionProvider } from '../context/ActionContext'
-import { ConfigConextProps, ConfigProvider } from '../context/ConfigContext'
+import {
+  ConfigConextProps,
+  ConfigContext,
+  ConfigProvider
+} from '../context/ConfigContext'
 import { Group, GroupData } from './Group'
 import './RuleBuilder.css'
 
@@ -24,17 +28,19 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   inputData,
   consequenceFields,
   controlElements,
+  translations,
   controlClassnames,
-  onRulesChange,
-  getGroupIndex
+  displayConditionFirst,
+  onRulesChange
 }) => {
   return (
     <ConfigProvider
       queryProps={queryProps}
       consequenceFields={consequenceFields}
       controlElements={controlElements}
+      translations={translations}
       controlClassnames={controlClassnames}
-      getGroupIndex={getGroupIndex}
+      displayConditionFirst={displayConditionFirst}
     >
       <ActionProvider inputData={inputData}>
         <RuleComponent onRulesChange={onRulesChange} />
@@ -47,6 +53,9 @@ const RuleComponent: React.FC<{
   onRulesChange: (onRulesChange: RuleBuilderData) => void
 }> = ({ onRulesChange }) => {
   const { root, dispatch } = React.useContext(ActionContext)
+  const { controlElements, translations, controlClassnames } = React.useContext(
+    ConfigContext
+  )
 
   useEffect(() => {
     onRulesChange(root)
@@ -54,20 +63,17 @@ const RuleComponent: React.FC<{
 
   return (
     <>
-      <div style={{ display: 'inline' }}>
-        <button
-          onClick={() => {
-            dispatch({ type: Action.AddGroup })
-          }}
-        >
-          Add Group
-        </button>
-        <div>
-          {root.groups.map((group, gidx) => (
-            <Group key={'group' + gidx} data={group} gidx={gidx} />
-          ))}
-        </div>
-      </div>
+      <controlElements.addGroup
+        className={controlClassnames.addGroup}
+        handleOnClick={() => {
+          dispatch({ type: Action.AddGroup })
+        }}
+        label={translations.addGroup.label}
+        title={translations.addGroup.title}
+      />
+      {root.groups.map((group, gidx) => (
+        <Group key={'group' + gidx} data={group} gidx={gidx} />
+      ))}
     </>
   )
 }

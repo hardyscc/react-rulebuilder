@@ -8,8 +8,10 @@ const RuleTag: React.FC<RuleTagProps> = ({
   ridx
 }) => (
   <div className={className}>
-    {label} {ridx}
-    {children}
+    <label>
+      {label} {ridx}
+    </label>
+    <div className='child'>{children}</div>
   </div>
 )
 

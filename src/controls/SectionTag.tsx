@@ -7,7 +7,7 @@ const SectionTag: React.FC<SectionTagProps> = ({
   label
 }) => (
   <div className={className}>
-    {label}
+    <label>{label}</label>
     <div className='child'>{children}</div>
   </div>
 )
