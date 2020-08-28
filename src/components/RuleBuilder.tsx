@@ -7,7 +7,7 @@ import {
   ConfigProvider
 } from '../context/ConfigContext'
 import { Group, GroupData } from './Group'
-import './RuleBuilder.css'
+// import './RuleBuilder.css'
 
 export type RuleBuilderData = {
   groups: GroupData[]

@@ -117,7 +117,7 @@ const init: RuleBuilderData = {
   ]
 }
 test('Renders', async () => {
-  const { getByText } = render(
+  const { getAllByText } = render(
     <>
       <RuleBuilder
         inputData={init}
@@ -134,7 +134,7 @@ test('Renders', async () => {
       />
     </>
   )
-  console.log(getByText)
+  console.log(getAllByText('Score Type'))
 
-  expect(getByText('AND')).toBeInTheDocument()
+  expect(getAllByText('Score Type')[0]).toBeInTheDocument()
 })
