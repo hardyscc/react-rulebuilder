@@ -1,9 +1,13 @@
 import * as React from 'react'
 import { useEffect } from 'react'
-import { QueryBuilderProps } from 'react-querybuilder'
 import { Action, ActionContext, ActionProvider } from '../context/ActionContext'
-import { ConfigProvider } from '../context/ConfigContext'
+import {
+  ConfigConextProps,
+  ConfigContext,
+  ConfigProvider
+} from '../context/ConfigContext'
 import { Group, GroupData } from './Group'
+// import './RuleBuilder.css'
 
 export type RuleBuilderData = {
   groups: GroupData[]
@@ -15,51 +19,61 @@ export type consequenceFieldType = {
 }
 
 export type RuleBuilderProps = {
-  queryProps: QueryBuilderProps
   inputData?: RuleBuilderData
-  consequenceFields: consequenceFieldType[]
-  getRuleJson: (getRuleJson: RuleBuilderData) => void
-}
+  onRulesChange: (onRulesChange: RuleBuilderData) => void
+} & ConfigConextProps
 
 export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   queryProps,
   inputData,
   consequenceFields,
-  getRuleJson
+  controlElements,
+  translations,
+  controlClassnames,
+  displayConditionFirst,
+  onRulesChange
 }) => {
   return (
     <ConfigProvider
       queryProps={queryProps}
       consequenceFields={consequenceFields}
+      controlElements={controlElements}
+      translations={translations}
+      controlClassnames={controlClassnames}
+      displayConditionFirst={displayConditionFirst}
     >
       <ActionProvider inputData={inputData}>
-        <RuleComponent getRuleJson={getRuleJson} />
+        <RuleComponent onRulesChange={onRulesChange} />
       </ActionProvider>
     </ConfigProvider>
   )
 }
 
 const RuleComponent: React.FC<{
-  getRuleJson: (getRuleJson: RuleBuilderData) => void
-}> = ({ getRuleJson }) => {
+  onRulesChange: (onRulesChange: RuleBuilderData) => void
+}> = ({ onRulesChange }) => {
   const { root, dispatch } = React.useContext(ActionContext)
+  const { controlElements, translations, controlClassnames } = React.useContext(
+    ConfigContext
+  )
 
   useEffect(() => {
-    getRuleJson(root)
+    onRulesChange(root)
   }, [root])
 
   return (
-    <div>
+    <>
+      <controlElements.addGroup
+        className={controlClassnames.addGroup}
+        handleOnClick={() => {
+          dispatch({ type: Action.AddGroup })
+        }}
+        label={translations.addGroup.label}
+        title={translations.addGroup.title}
+      />
       {root.groups.map((group, gidx) => (
         <Group key={'group' + gidx} data={group} gidx={gidx} />
       ))}
-      <button
-        onClick={() => {
-          dispatch({ type: Action.AddGroup })
-        }}
-      >
-        Add Group
-      </button>
-    </div>
+    </>
   )
 }

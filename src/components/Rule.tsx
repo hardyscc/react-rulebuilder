@@ -2,6 +2,7 @@ import React from 'react'
 import QueryBuilder, { RuleGroupType } from 'react-querybuilder'
 import { Action, ActionContext } from '../context/ActionContext'
 import { ConfigContext } from '../context/ConfigContext'
+import { GroupData } from './Group'
 
 export type RuleData = {
   priority: number
@@ -10,39 +11,48 @@ export type RuleData = {
     field: string
     value: string
   }
-  function: string
+  flow: string
 }
 
 export interface RuleProps {
   data: RuleData
+  parent: GroupData
   gidx: number
   ridx: number
 }
 
 export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
   const { dispatch } = React.useContext(ActionContext)
-  const { queryProps, consequenceFields } = React.useContext(ConfigContext)
+  const {
+    controlElements,
+    translations,
+    controlClassnames,
+    queryProps,
+    consequenceFields,
+    displayConditionFirst
+  } = React.useContext(ConfigContext)
 
   return (
-    <div
-      style={{
-        display: 'block',
-        border: '1px solid blue',
-        margin: '3px 6px',
-        padding: 6
-      }}
+    <controlElements.ruleTag
+      className={controlClassnames.rule}
+      label={translations.ruleTag.label}
+      gidx={gidx}
+      ridx={ridx}
     >
-      <label> Rule {ridx} </label>
-      <button
-        onClick={() => {
+      <controlElements.removeRule
+        className={controlClassnames.removeRule}
+        handleOnClick={() => {
           dispatch({ type: Action.DeleteRule, gidx: gidx, ridx: ridx })
         }}
-      >
-        x
-      </button>
-      <div style={{ display: 'block' }}>
-        Condition:{' '}
-        <div style={{ border: '1px solid black', padding: 3 }}>
+        label={translations.removeRule.label}
+        title={translations.removeRule.title + `-${gidx}-${ridx}`}
+      />
+
+      {displayConditionFirst && (
+        <controlElements.conditionTag
+          className={controlClassnames.condition}
+          label='Condition'
+        >
           <QueryBuilder
             {...{
               ...queryProps,
@@ -62,65 +72,99 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
               }
             }}
           />
-        </div>
-      </div>
-      Consequence:{' '}
-      <div style={{ display: 'block' }}>
-        <label htmlFor={'consequence-field' + ridx}> Field: </label>
-        <select
-          id={'consequence-field' + ridx}
-          defaultValue={data.consequence.field}
-          onChange={v => {
+        </controlElements.conditionTag>
+      )}
+
+      <controlElements.consequenceTag
+        className={controlClassnames.consequence}
+        label='Consequence'
+      >
+        <controlElements.consequenceFieldInput
+          value={data.consequence.field}
+          handleOnChange={v => {
             dispatch({
               type: Action.UpdateRule,
               gidx: gidx,
               ridx: ridx,
-              consequenceField: v.target.value
+              consequenceField: v
             })
           }}
-        >
-          {consequenceFields.map(field => {
-            return (
-              <option
-                key={field.value + ridx}
-                value={field.value}
-                label={field.label}
-              />
-            )
-          })}
-        </select>
-        <label htmlFor={'consequence-value' + ridx}> Value: </label>
-        <input
-          id={'consequence-value' + ridx}
-          defaultValue={data.consequence.value}
-          onChange={v => {
-            dispatch({
-              type: Action.UpdateRule,
-              gidx: gidx,
-              ridx: ridx,
-              consequenceValue: v.target.value
-            })
-          }}
+          title={translations.consequenceField.title + `-${gidx}-${ridx}`}
+          className={controlClassnames.consequenceField}
+          type='select'
+          values={consequenceFields}
+          label={translations.consequenceField.label}
+          disabled={true}
         />
-      </div>
-      <div style={{ display: 'block' }}>
-        <label htmlFor={'function' + ridx}> Function: </label>
-        <select
-          id={'function' + ridx}
-          defaultValue={data.function}
-          onChange={v => {
+
+        <controlElements.consequenceValueInput
+          value={data.consequence.value}
+          handleOnChange={v => {
             dispatch({
               type: Action.UpdateRule,
               gidx: gidx,
               ridx: ridx,
-              function: v.target.value
+              consequenceValue: v
             })
           }}
+          title={translations.consequenceValue.title + `-${gidx}-${ridx}`}
+          className={controlClassnames.consequenceValue}
+          type='input'
+          label={translations.consequenceValue.label}
+        />
+      </controlElements.consequenceTag>
+
+      {!displayConditionFirst && (
+        <controlElements.conditionTag
+          className={controlClassnames.condition}
+          label='Condition'
         >
-          <option key={'next' + ridx} value='R.next()' label='R.next()' />
-          <option key={'stop' + ridx} value='R.stop()' label='R.stop()' />
-        </select>
-      </div>
-    </div>
+          <QueryBuilder
+            {...{
+              ...queryProps,
+              query: data.condition,
+              translations: {
+                ...queryProps.translations,
+                addGroup: { label: '+Statement', title: 'Add statement' },
+                addRule: { label: '+Condition', title: 'Add condition' }
+              },
+              onQueryChange: (ruleGroup: RuleGroupType) => {
+                dispatch({
+                  type: Action.UpdateRule,
+                  gidx: gidx,
+                  ridx: ridx,
+                  condition: ruleGroup
+                })
+              }
+            }}
+          />
+        </controlElements.conditionTag>
+      )}
+
+      <controlElements.flowTag
+        className={controlClassnames.flow}
+        label={translations.flowTag.label}
+      >
+        <controlElements.flowInput
+          value={data.flow}
+          handleOnChange={v => {
+            dispatch({
+              type: Action.UpdateRule,
+              gidx: gidx,
+              ridx: ridx,
+              flow: v
+            })
+          }}
+          title={translations.flowValue.title + `-${gidx}-${ridx}`}
+          className={controlClassnames.flowValue}
+          type='select'
+          values={[
+            { value: 'R.next()', label: 'Next' },
+            { value: 'R.stop()', label: 'Stop' }
+          ]}
+          label={translations.flowValue.label}
+        />
+      </controlElements.flowTag>
+    </controlElements.ruleTag>
   )
 }

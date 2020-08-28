@@ -1,10 +1,12 @@
 import { nanoid } from 'nanoid'
 import React from 'react'
 import { Action, ActionContext } from '../context/ActionContext'
+import { ConfigContext } from '../context/ConfigContext'
 import { Rule, RuleData } from './Rule'
 
 export type GroupData = {
   rules: RuleData[]
+  groupDefination?: string
 }
 
 export interface GroupProps {
@@ -14,29 +16,43 @@ export interface GroupProps {
 
 export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
   const { dispatch } = React.useContext(ActionContext)
+  const { controlElements, translations, controlClassnames, consequenceFields } = React.useContext(ConfigContext)
 
   return (
-    <div
-      style={{
-        display: 'block',
-        border: '1px solid green',
-        margin: '3px 6px',
-        padding: 3
-      }}
+    <controlElements.groupTag
+      className={controlClassnames.group}
+      label="Group"
+      gidx={gidx}
     >
-      <label>Group {gidx}</label>
-      <button
-        onClick={() => {
+      <controlElements.groupDefinationInput
+        value={data.groupDefination}
+        handleOnChange={v => {
+          dispatch({
+            type: Action.UpdateGroup,
+            gidx: gidx,
+            groupDefination: v
+          })
+        }}
+        title={translations.groupDefination.title + `-${gidx}`}
+        className={controlClassnames.groupDefination}
+        type="select"
+        values={[{ value: undefined, label: 'Please select' }, ...consequenceFields]}
+        label={translations.groupDefination.label}
+      />
+      <controlElements.removeGroup
+        className={controlClassnames.removeGroup}
+        handleOnClick={() => {
           dispatch({ type: Action.DeleteGroup, gidx: gidx })
         }}
-      >
-        x
-      </button>
+        label={translations.removeGroup.label}
+        title={translations.removeGroup.title + `-${gidx}`}
+      />
       {data.rules.map((rule, ridx) => (
-        <Rule key={'rule' + ridx} data={rule} gidx={gidx} ridx={ridx} />
+        <Rule key={'rule' + ridx} data={rule} parent={data} gidx={gidx} ridx={ridx} />
       ))}
-      <button
-        onClick={() => {
+      <controlElements.addRule
+        className={controlClassnames.addRule}
+        handleOnClick={() => {
           dispatch({
             type: Action.AddRule,
             gidx: gidx,
@@ -53,12 +69,12 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
               combinator: 'and',
               not: false
             },
-            function: 'R.next()'
+            flow: 'R.next()'
           })
         }}
-      >
-        Add Rule
-      </button>
-    </div>
+        label={translations.addRule.label}
+        title={translations.addRule.title + `-${gidx}`}
+      />
+    </controlElements.groupTag>
   )
 }

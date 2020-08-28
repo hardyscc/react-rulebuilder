@@ -1,22 +1,13 @@
 import { nanoid } from 'nanoid'
 import React, { createContext, Dispatch, useReducer } from 'react'
 import { RuleGroupType } from 'react-querybuilder'
+import { RuleData } from '../components/Rule'
 import { RuleBuilderData } from '../components/RuleBuilder'
 
 const initData: RuleBuilderData = {
   groups: [
     {
-      rules: [
-        {
-          priority: 100,
-          condition: { id: nanoid(), rules: [], combinator: 'and', not: false },
-          consequence: {
-            field: 'Score Type',
-            value: 'T'
-          },
-          function: 'R.next()'
-        }
-      ]
+      rules: []
     }
   ]
 }
@@ -24,6 +15,7 @@ const initData: RuleBuilderData = {
 export enum Action {
   AddGroup,
   DeleteGroup,
+  UpdateGroup,
   AddRule,
   DeleteRule,
   UpdateRule
@@ -33,12 +25,17 @@ export type Actions =
   | { type: Action.AddGroup }
   | { type: Action.DeleteGroup; gidx: number }
   | {
+      type: Action.UpdateGroup
+      gidx: number
+      groupDefination?: string
+    }
+  | {
       type: Action.AddRule
       gidx: number
       priority: number
       condition?: RuleGroupType
       consequence?: RuleGroupType
-      function: string
+      flow: string
     }
   | { type: Action.DeleteRule; gidx: number; ridx: number }
   | {
@@ -49,7 +46,7 @@ export type Actions =
       condition?: RuleGroupType
       consequenceField?: string
       consequenceValue?: string
-      function?: string
+      flow?: string
     }
 
 const reducer = (draft: RuleBuilderData, action: Actions) => {
@@ -57,15 +54,35 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
     case Action.AddGroup:
       return {
         ...draft,
-        groups: [...draft.groups, { id: nanoid(), rules: [] }]
+        groups: [...draft.groups, { rules: [] }]
       }
     case Action.DeleteGroup:
       draft.groups.splice(action.gidx, 1)
       return {
         ...draft
       }
+    case Action.UpdateGroup:
+      draft.groups[action.gidx] = {
+        rules: draft.groups[action.gidx].rules.map<RuleData>(rule => {
+          return {
+            ...rule,
+            consequence: {
+              ...rule.consequence,
+              field: action.groupDefination ?? ''
+            }
+          }
+        }),
+        groupDefination: action.groupDefination
+      }
+      draft.groups[action.gidx].rules.map(
+        rule => (rule.consequence.field = action.groupDefination ?? '')
+      )
+      return {
+        ...draft
+      }
     case Action.AddRule:
       draft.groups[action.gidx] = {
+        ...draft.groups[action.gidx],
         rules: [
           ...draft.groups[action.gidx].rules,
           {
@@ -77,10 +94,10 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
               not: false
             },
             consequence: {
-              field: 'scoreType',
-              value: 'T'
+              field: draft.groups[action.gidx].groupDefination ?? '',
+              value: ''
             },
-            function: 'R.next()'
+            flow: 'R.next()'
           }
         ]
       }
@@ -102,9 +119,7 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
             action.consequenceValue ??
             draft.groups[action.gidx].rules[action.ridx].consequence.value
         },
-        function:
-          action.function ??
-          draft.groups[action.gidx].rules[action.ridx].function
+        flow: action.flow ?? draft.groups[action.gidx].rules[action.ridx].flow
       }
       return { ...draft }
     default:
