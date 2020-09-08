@@ -68,15 +68,14 @@ const reducer = (draft: RuleBuilderData, action: Actions) => {
             ...rule,
             consequence: {
               ...rule.consequence,
-              field: action.groupDefination ?? ''
+              field: !!action.groupDefination
+                ? action.groupDefination
+                : rule.consequence.field
             }
           }
         }),
         groupDefination: action.groupDefination
       }
-      draft.groups[action.gidx].rules.map(
-        rule => (rule.consequence.field = action.groupDefination ?? '')
-      )
       return {
         ...draft
       }

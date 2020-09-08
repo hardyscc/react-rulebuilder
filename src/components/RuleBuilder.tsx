@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { Action, ActionContext, ActionProvider } from '../context/ActionContext'
 import {
   ConfigConextProps,
@@ -30,6 +30,8 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   controlElements,
   translations,
   controlClassnames,
+  displayAddRuleTop,
+  displayAddGroupTop,
   displayConditionFirst,
   onRulesChange
 }) => {
@@ -40,6 +42,8 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({
       controlElements={controlElements}
       translations={translations}
       controlClassnames={controlClassnames}
+      displayAddRuleTop={displayAddRuleTop}
+      displayAddGroupTop={displayAddGroupTop}
       displayConditionFirst={displayConditionFirst}
     >
       <ActionProvider inputData={inputData}>
@@ -49,13 +53,29 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({
   )
 }
 
+function addGroupEl () {
+  const { dispatch } = useContext(ActionContext)
+  const { controlElements, translations, controlClassnames } = useContext(
+    ConfigContext
+  )
+
+  return (
+    <controlElements.addGroup
+      className={controlClassnames.addGroup}
+      handleOnClick={() => {
+        dispatch({ type: Action.AddGroup })
+      }}
+      label={translations.addGroup.label}
+      title={translations.addGroup.title}
+    />
+  )
+}
+
 const RuleComponent: React.FC<{
   onRulesChange: (onRulesChange: RuleBuilderData) => void
 }> = ({ onRulesChange }) => {
-  const { root, dispatch } = React.useContext(ActionContext)
-  const { controlElements, translations, controlClassnames } = React.useContext(
-    ConfigContext
-  )
+  const { root } = useContext(ActionContext)
+  const { displayAddGroupTop } = useContext(ConfigContext)
 
   useEffect(() => {
     onRulesChange(root)
@@ -63,17 +83,11 @@ const RuleComponent: React.FC<{
 
   return (
     <>
-      <controlElements.addGroup
-        className={controlClassnames.addGroup}
-        handleOnClick={() => {
-          dispatch({ type: Action.AddGroup })
-        }}
-        label={translations.addGroup.label}
-        title={translations.addGroup.title}
-      />
+      {displayAddGroupTop && addGroupEl()}
       {root.groups.map((group, gidx) => (
         <Group key={'group' + gidx} data={group} gidx={gidx} />
       ))}
+      {!displayAddGroupTop && addGroupEl()}
     </>
   )
 }

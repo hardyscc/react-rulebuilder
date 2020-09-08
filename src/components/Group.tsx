@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Action, ActionContext } from '../context/ActionContext'
 import { ConfigContext } from '../context/ConfigContext'
 import { Rule, RuleData } from './Rule'
@@ -14,14 +14,51 @@ export interface GroupProps {
   gidx: number
 }
 
+function addRuleEl(gidx: number) {
+  const { dispatch } = useContext(ActionContext)
+  const {
+    controlElements,
+    translations,
+    controlClassnames,
+  } = useContext(ConfigContext)
+
+  return (
+    <controlElements.addRule
+      className={controlClassnames.addRule}
+      handleOnClick={() => {
+        dispatch({
+          type: Action.AddRule,
+          gidx: gidx,
+          priority: 100,
+          condition: {
+            id: nanoid(),
+            rules: [],
+            combinator: 'and',
+            not: false
+          },
+          consequence: {
+            id: nanoid(),
+            rules: [],
+            combinator: 'and',
+            not: false
+          },
+          flow: 'R.next()'
+        })
+      }}
+      label={translations.addRule.label}
+      title={translations.addRule.title + `-${gidx}`}
+    />
+  )
+}
+
 export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
-  const { dispatch } = React.useContext(ActionContext)
-  const { controlElements, translations, controlClassnames, consequenceFields } = React.useContext(ConfigContext)
+  const { dispatch } = useContext(ActionContext)
+  const { controlElements, translations, controlClassnames, consequenceFields, displayAddRuleTop } = useContext(ConfigContext)
 
   return (
     <controlElements.groupTag
       className={controlClassnames.group}
-      label="Group"
+      label={translations.groupTag.label}
       gidx={gidx}
     >
       <controlElements.groupDefinationInput
@@ -36,7 +73,7 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
         title={translations.groupDefination.title + `-${gidx}`}
         className={controlClassnames.groupDefination}
         type="select"
-        values={[{ value: undefined, label: 'Please select' }, ...consequenceFields]}
+        values={[{ value: undefined, label: '' }, ...consequenceFields]}
         label={translations.groupDefination.label}
       />
       <controlElements.removeGroup
@@ -47,34 +84,13 @@ export const Group: React.FC<GroupProps> = ({ data, gidx }) => {
         label={translations.removeGroup.label}
         title={translations.removeGroup.title + `-${gidx}`}
       />
+
+      {displayAddRuleTop && addRuleEl(gidx)}
       {data.rules.map((rule, ridx) => (
         <Rule key={'rule' + ridx} data={rule} parent={data} gidx={gidx} ridx={ridx} />
       ))}
-      <controlElements.addRule
-        className={controlClassnames.addRule}
-        handleOnClick={() => {
-          dispatch({
-            type: Action.AddRule,
-            gidx: gidx,
-            priority: 100,
-            condition: {
-              id: nanoid(),
-              rules: [],
-              combinator: 'and',
-              not: false
-            },
-            consequence: {
-              id: nanoid(),
-              rules: [],
-              combinator: 'and',
-              not: false
-            },
-            flow: 'R.next()'
-          })
-        }}
-        label={translations.addRule.label}
-        title={translations.addRule.title + `-${gidx}`}
-      />
+      {!displayAddRuleTop && addRuleEl(gidx)}
+
     </controlElements.groupTag>
   )
 }

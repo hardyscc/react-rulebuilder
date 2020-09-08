@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import QueryBuilder, { RuleGroupType } from 'react-querybuilder'
 import { Action, ActionContext } from '../context/ActionContext'
 import { ConfigContext } from '../context/ConfigContext'
@@ -21,16 +21,58 @@ export interface RuleProps {
   ridx: number
 }
 
-export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
-  const { dispatch } = React.useContext(ActionContext)
+function conditionEl (data: RuleData, gidx: number, ridx: number) {
+  const { dispatch } = useContext(ActionContext)
   const {
     controlElements,
     translations,
     controlClassnames,
-    queryProps,
+    queryProps
+  } = useContext(ConfigContext)
+
+  return (
+    <controlElements.conditionTag
+      className={controlClassnames.condition}
+      label={translations.conditionTag.label}
+    >
+      <QueryBuilder
+        {...{
+          ...queryProps,
+          query: data.condition,
+          translations: {
+            ...queryProps.translations,
+            addGroup: queryProps.translations?.addGroup ?? {
+              label: '+Statement',
+              title: 'Add statement'
+            },
+            addRule: queryProps.translations?.addRule ?? {
+              label: '+Condition',
+              title: 'Add condition'
+            }
+          },
+          onQueryChange: (ruleGroup: RuleGroupType) => {
+            dispatch({
+              type: Action.UpdateRule,
+              gidx: gidx,
+              ridx: ridx,
+              condition: ruleGroup
+            })
+          }
+        }}
+      />
+    </controlElements.conditionTag>
+  )
+}
+
+export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx, parent }) => {
+  const { dispatch } = useContext(ActionContext)
+  const {
+    controlElements,
+    translations,
+    controlClassnames,
     consequenceFields,
     displayConditionFirst
-  } = React.useContext(ConfigContext)
+  } = useContext(ConfigContext)
 
   return (
     <controlElements.ruleTag
@@ -48,36 +90,11 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
         title={translations.removeRule.title + `-${gidx}-${ridx}`}
       />
 
-      {displayConditionFirst && (
-        <controlElements.conditionTag
-          className={controlClassnames.condition}
-          label='Condition'
-        >
-          <QueryBuilder
-            {...{
-              ...queryProps,
-              query: data.condition,
-              translations: {
-                ...queryProps.translations,
-                addGroup: { label: '+Statement', title: 'Add statement' },
-                addRule: { label: '+Condition', title: 'Add condition' }
-              },
-              onQueryChange: (ruleGroup: RuleGroupType) => {
-                dispatch({
-                  type: Action.UpdateRule,
-                  gidx: gidx,
-                  ridx: ridx,
-                  condition: ruleGroup
-                })
-              }
-            }}
-          />
-        </controlElements.conditionTag>
-      )}
+      {displayConditionFirst && conditionEl(data, gidx, ridx)}
 
       <controlElements.consequenceTag
         className={controlClassnames.consequence}
-        label='Consequence'
+        label={translations.consequenceTag.label}
       >
         <controlElements.consequenceFieldInput
           value={data.consequence.field}
@@ -94,7 +111,7 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
           type='select'
           values={consequenceFields}
           label={translations.consequenceField.label}
-          disabled={true}
+          disabled={!!parent.groupDefination}
         />
 
         <controlElements.consequenceValueInput
@@ -114,32 +131,7 @@ export const Rule: React.FC<RuleProps> = ({ data, gidx, ridx }) => {
         />
       </controlElements.consequenceTag>
 
-      {!displayConditionFirst && (
-        <controlElements.conditionTag
-          className={controlClassnames.condition}
-          label='Condition'
-        >
-          <QueryBuilder
-            {...{
-              ...queryProps,
-              query: data.condition,
-              translations: {
-                ...queryProps.translations,
-                addGroup: { label: '+Statement', title: 'Add statement' },
-                addRule: { label: '+Condition', title: 'Add condition' }
-              },
-              onQueryChange: (ruleGroup: RuleGroupType) => {
-                dispatch({
-                  type: Action.UpdateRule,
-                  gidx: gidx,
-                  ridx: ridx,
-                  condition: ruleGroup
-                })
-              }
-            }}
-          />
-        </controlElements.conditionTag>
-      )}
+      {!displayConditionFirst && conditionEl(data, gidx, ridx)}
 
       <controlElements.flowTag
         className={controlClassnames.flow}

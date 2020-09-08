@@ -54,7 +54,6 @@ export type Classnames = {
 export type Translations = {
   groupTag: {
     label: string
-    title: string
   }
   groupDefination: {
     label: string
@@ -64,7 +63,6 @@ export type Translations = {
   conditionTag: { label: string }
   consequenceTag: {
     label: string
-    title: string
   }
   consequenceField: {
     label: string
@@ -117,8 +115,7 @@ export type Controls = {
 
 const defaultTranslations: Translations = {
   groupTag: {
-    label: 'Group',
-    title: 'group-defination'
+    label: 'Group'
   },
   groupDefination: {
     label: '',
@@ -127,8 +124,7 @@ const defaultTranslations: Translations = {
   ruleTag: { label: 'Rule' },
   conditionTag: { label: 'Condition' },
   consequenceTag: {
-    label: 'Consequence',
-    title: 'consequence'
+    label: 'Consequence'
   },
   consequenceField: {
     label: 'Field',
@@ -202,6 +198,8 @@ export type ConfigType = {
   controlElements: Controls
   translations: Translations
   controlClassnames: Classnames
+  displayAddRuleTop: boolean
+  displayAddGroupTop: boolean
   displayConditionFirst: boolean
 }
 
@@ -211,6 +209,8 @@ export type ConfigConextProps = {
   controlElements?: Partial<Controls>
   translations?: Partial<Translations>
   controlClassnames?: Partial<Classnames>
+  displayAddRuleTop?: boolean
+  displayAddGroupTop?: boolean
   displayConditionFirst?: boolean
 }
 
@@ -223,6 +223,8 @@ const ConfigContext = createContext<ConfigType>({
   controlElements: { ...defaultControlElements },
   translations: { ...defaultTranslations },
   controlClassnames: { ...defaultControlClassnames },
+  displayAddRuleTop: true,
+  displayAddGroupTop: true,
   displayConditionFirst: true
 })
 
@@ -233,6 +235,8 @@ const ConfigProvider: React.FC<ConfigConextProps> = ({
   translations,
   controlClassnames,
   children,
+  displayAddRuleTop,
+  displayAddGroupTop,
   displayConditionFirst
 }) => {
   return (
@@ -249,6 +253,8 @@ const ConfigProvider: React.FC<ConfigConextProps> = ({
         controlClassnames: controlClassnames
           ? { ...defaultControlClassnames, ...controlClassnames }
           : defaultControlClassnames,
+        displayAddRuleTop: displayAddRuleTop ?? true,
+        displayAddGroupTop: displayAddGroupTop ?? true,
         displayConditionFirst: displayConditionFirst ?? true
       }}
     >
