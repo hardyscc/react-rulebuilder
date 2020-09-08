@@ -22,6 +22,16 @@ import { RuleBuilder } from 'react-rulebuilder'
       ]}
       queryProps={{
         fields: [{ name: 'age', label: 'Age' }],
+        translations: {
+          addGroup: {
+            label: '+ Box',
+            title: 'Add Box'
+          },
+          addRule: {
+            label: '+ Line',
+            title: 'Add Line'
+          }
+        },
         onQueryChange: () => {}
       }}
       onRulesChange={() => {}}
@@ -163,12 +173,23 @@ import { RuleBuilder } from 'react-rulebuilder'
           { name: 'sex', label: 'Sex' },
           { name: 'menopause', label: 'Menopause' }
         ],
+        translations: {
+          addGroup: {
+            label: '+ Box',
+            title: 'Add Box'
+          },
+          addRule: {
+            label: '+ Line',
+            title: 'Add Line'
+          }
+        },
         onQueryChange: () => {}
       }}
       onRulesChange={json => {
         console.log('advance json output')
         console.log(json)
       }}
+      displayAddRuleTop={false}
       displayConditionFirst={false}
       controlClassnames={{ flow: 'none' }}
     />
