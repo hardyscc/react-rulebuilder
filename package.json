@@ -39,9 +39,9 @@
     "jest": "26.6.0",
     "lint-staged": "10.4.2",
     "prettier-standard": "16.4.1",
-    "react": "16.14.0",
+    "react": "17.0.0",
     "react-docgen-typescript-loader": "3.7.2",
-    "react-dom": "16.14.0",
+    "react-dom": "17.0.0",
     "release-it": "14.2.0",
     "rollup": "2.32.0",
     "rollup-plugin-commonjs": "10.1.0",
@@ -58,8 +58,8 @@
     "react-querybuilder": "3.8.0"
   },
   "peerDependencies": {
-    "react": "^16",
-    "react-dom": "^16"
+    "react": "^16 || ^17.0.0",
+    "react-dom": "^16 || ^17.0.0"
   },
   "jest": {
     "preset": "ts-jest",
