@@ -48,7 +48,7 @@
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "rollup-plugin-typescript2": "0.29.0",
-    "standard": "16.0.1",
+    "standard": "16.0.2",
     "standard-prettier": "1.0.1",
     "ts-jest": "26.4.4",
     "ts-loader": "8.0.11",
