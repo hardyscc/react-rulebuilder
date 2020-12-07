@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react'
 import * as React from 'react'
+import { ActionElement } from '../../controls'
 import { RuleBuilder } from '../../index'
 import { RuleBuilderData } from '../RuleBuilder'
 
@@ -116,25 +117,36 @@ const init: RuleBuilderData = {
     }
   ]
 }
-test('Renders', async () => {
-  const { getAllByText } = render(
-    <>
-      <RuleBuilder
-        inputData={init}
-        consequenceFields={[
-          { value: 'scoreType', label: 'Score Type' },
-          { value: 'impression', label: 'Impression' }
-        ]}
-        queryProps={{
-          fields: [{ name: 'age', label: 'Age' }],
-          onQueryChange: () => {}
-        }}
-        onRulesChange={() => {}}
-        controlClassnames={{ flow: 'none' }}
-      />
-    </>
-  )
-  console.log(getAllByText('Score Type'))
 
-  expect(getAllByText('Score Type')[0]).toBeInTheDocument()
+describe('RuleBuilder', () => {
+  it('General', async () => {
+    const { getAllByText } = render(
+      <>
+        <RuleBuilder
+          inputData={init}
+          consequenceFields={[
+            { value: 'scoreType', label: 'Score Type' },
+            { value: 'impression', label: 'Impression' }
+          ]}
+          queryProps={{
+            fields: [{ name: 'age', label: 'Age' }],
+            onQueryChange: () => {}
+          }}
+          onRulesChange={() => {}}
+          controlClassnames={{ flow: 'none' }}
+          translations={{
+            conditionTag: {
+              label: ''
+            }
+          }}
+          controlElements={{ addGroup: ActionElement }}
+          displayAddRuleTop={false}
+          displayAddGroupTop={false}
+          displayConditionFirst={false}
+        />
+      </>
+    )
+
+    expect(getAllByText('Score Type')[0]).toBeInTheDocument()
+  })
 })
