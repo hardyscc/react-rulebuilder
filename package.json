@@ -43,7 +43,7 @@
     "react-docgen-typescript-loader": "3.7.2",
     "react-dom": "17.0.1",
     "release-it": "14.4.1",
-    "rollup": "2.41.0",
+    "rollup": "2.41.1",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-peer-deps-external": "2.2.4",
