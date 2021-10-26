@@ -55,7 +55,7 @@
     "typescript": "4.1.5"
   },
   "dependencies": {
-    "react-querybuilder": "3.9.0"
+    "react-querybuilder": "3.12.1"
   },
   "peerDependencies": {
     "react": "^16 || ^17.0.0",
